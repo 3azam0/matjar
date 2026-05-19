@@ -35,6 +35,22 @@ function normalizeSearchText(value) {
     .trim();
 }
 
+function getSearchTerms(value) {
+  return normalizeSearchText(value)
+    .split(' ')
+    .filter((term) => term.length > 1);
+}
+
+function productSearchText(product) {
+  return normalizeSearchText([
+    product.name,
+    product.description,
+    product.note,
+    product.categoryTitle,
+    product.categoryDescription,
+  ].filter(Boolean).join(' '));
+}
+
 function ProductCard({ product, categoryTitle, whatsappNumber, onImageClick }) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const images = useMemo(
@@ -435,19 +451,13 @@ export function CatalogPage() {
   }, [activeId, allProducts]);
 
   const activeProducts = useMemo(() => {
-    const normalizedSearch = normalizeSearchText(searchTerm);
+    const searchTerms = getSearchTerms(searchTerm);
 
     const filtered = baseProducts.filter((product) => {
-      if (!normalizedSearch) return true;
+      if (searchTerms.length === 0) return true;
 
-      const searchableText = normalizeSearchText([
-        product.name,
-        product.description,
-        product.note,
-        product.categoryTitle,
-      ].filter(Boolean).join(' '));
-
-      return searchableText.includes(normalizedSearch);
+      const searchableText = productSearchText(product);
+      return searchTerms.every((term) => searchableText.includes(term));
     });
 
     return [...filtered].sort((a, b) => {
@@ -471,7 +481,37 @@ export function CatalogPage() {
     });
   }, [baseProducts, searchTerm, sortBy]);
 
+  const searchSuggestions = useMemo(() => {
+    const currentSearch = normalizeSearchText(searchTerm);
+    const suggestions = [];
+    const seen = new Set();
+
+    const addSuggestion = (value) => {
+      const label = String(value || '').trim();
+      const normalized = normalizeSearchText(label);
+      if (!label || normalized.length < 2 || seen.has(normalized)) return;
+      if (currentSearch && !normalized.includes(currentSearch) && !currentSearch.includes(normalized)) return;
+      seen.add(normalized);
+      suggestions.push(label);
+    };
+
+    categories.forEach((category) => addSuggestion(category.title));
+    allProducts.forEach((product) => {
+      addSuggestion(product.name);
+      addSuggestion(product.categoryTitle);
+      if (product.note) {
+        String(product.note)
+          .split(/[—،,-]/)
+          .slice(0, 2)
+          .forEach(addSuggestion);
+      }
+    });
+
+    return suggestions.slice(0, 6);
+  }, [allProducts, categories, searchTerm]);
+
   const hasActiveFilters = searchTerm || sortBy !== 'date-desc' || activeId !== 'all';
+  const searchTerms = getSearchTerms(searchTerm);
 
   function resetFilters() {
     setActiveId('all');
@@ -490,29 +530,57 @@ export function CatalogPage() {
         </header>
 
         <section className="catalog-tools" aria-label="بحث وفلترة المنتجات">
-          <label className="catalog-search">
-            <Search size={20} aria-hidden />
-            <input
-              type="search"
-              value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
-              placeholder="ابحثي باسم المنتج، الخامة، اللون أو التصنيف"
-              aria-label="بحث في المنتجات"
-            />
-            {searchTerm ? (
-              <button type="button" onClick={() => setSearchTerm('')} aria-label="مسح البحث">
-                <X size={18} aria-hidden />
-              </button>
-            ) : null}
-          </label>
+          <div className="catalog-search-panel">
+            <label className="catalog-search">
+              <Search size={20} aria-hidden />
+              <input
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Escape') setSearchTerm('');
+                }}
+                placeholder="ابحثي باسم المنتج، الخامة، اللون أو التصنيف"
+                aria-label="بحث في المنتجات"
+              />
+              {searchTerm ? (
+                <button type="button" onClick={() => setSearchTerm('')} aria-label="مسح البحث">
+                  <X size={18} aria-hidden />
+                </button>
+              ) : null}
+            </label>
 
-          <div className="catalog-filter-row">
-            <div className="catalog-filter-label">
-              <SlidersHorizontal size={18} aria-hidden />
-              <span>الفلاتر</span>
+            <div className="catalog-search-meta" aria-live="polite">
+              <span>
+                {activeProducts.length} نتيجة من {allProducts.length} منتج
+              </span>
+              {searchTerms.length > 0 ? (
+                <small>مطابقة {searchTerms.length} كلمة بحث</small>
+              ) : (
+                <small>البحث يشمل الاسم والوصف والخامة والتصنيف</small>
+              )}
             </div>
 
+            {searchSuggestions.length > 0 ? (
+              <div className="catalog-suggestions" aria-label="اقتراحات البحث">
+                <span>اقتراحات</span>
+                {searchSuggestions.map((suggestion) => (
+                  <button
+                    key={suggestion}
+                    type="button"
+                    onClick={() => setSearchTerm(suggestion)}
+                    className={normalizeSearchText(searchTerm) === normalizeSearchText(suggestion) ? 'is-active' : ''}
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="catalog-filter-row">
             <label className="catalog-select">
+              <SlidersHorizontal size={18} aria-hidden />
               <span>الترتيب</span>
               <select value={sortBy} onChange={(event) => setSortBy(event.target.value)}>
                 <option value="date-desc">الأحدث إضافة</option>

@@ -34,31 +34,37 @@
 }
 
 .catalog-tools {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
   justify-content: space-between;
-  gap: 12px;
-  max-width: 780px;
-  margin: 0 auto 16px;
-  padding: 8px 12px;
-  border: 1px solid rgba(179, 142, 77, 0.18);
-  border-radius: 99px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 8px 24px rgba(92, 64, 51, 0.04);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  gap: 14px;
+  max-width: 980px;
+  margin: 0 auto 18px;
+  padding: 14px;
+  border: 1px solid rgba(179, 142, 77, 0.22);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 14px 34px rgba(92, 64, 51, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.catalog-search-panel {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
 }
 
 .catalog-search {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex: 1;
-  min-height: 40px;
-  padding: 0 12px;
-  border: 1px solid rgba(179, 142, 77, 0.25);
-  border-radius: 99px;
+  min-height: 54px;
+  padding: 0 14px;
+  border: 1px solid rgba(179, 142, 77, 0.32);
+  border-radius: 8px;
   background: #fffcf8;
   color: #7b5a32;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -91,7 +97,7 @@
   background: transparent;
   color: #3d2618;
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 700;
 }
 
@@ -108,8 +114,8 @@
 }
 
 .catalog-search button {
-  width: 26px;
-  height: 26px;
+  width: 32px;
+  height: 32px;
   display: inline-grid;
   place-items: center;
   border-radius: 50%;
@@ -125,9 +131,67 @@
 }
 
 .catalog-search button svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   color: inherit;
+}
+
+.catalog-search-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #6d5b51;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.catalog-search-meta small {
+  color: #9a8068;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.catalog-suggestions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+
+.catalog-suggestions > span {
+  flex: 0 0 auto;
+  color: #8b735f;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.catalog-suggestions button {
+  flex: 0 0 auto;
+  min-height: 32px;
+  max-width: 180px;
+  border: 1px solid rgba(179, 142, 77, 0.24);
+  border-radius: 999px;
+  padding: 0 12px;
+  background: #fff8ed;
+  color: #5c3d24;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.catalog-suggestions button:hover,
+.catalog-suggestions button.is-active {
+  background: #ffffff;
+  border-color: var(--gold, #b38e4d);
+  transform: translateY(-1px);
 }
 
 .catalog-filter-row {
@@ -140,11 +204,11 @@
 .catalog-filter-label,
 .catalog-select,
 .catalog-reset {
-  min-height: 40px;
+  min-height: 54px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  border-radius: 99px;
+  border-radius: 8px;
 }
 
 .catalog-filter-label {
@@ -167,6 +231,12 @@
   font-weight: 800;
   font-size: 0.85rem;
   transition: border-color 0.2s;
+}
+
+.catalog-select svg {
+  color: var(--gold, #b38e4d);
+  width: 16px;
+  height: 16px;
 }
 
 .catalog-select:hover {
@@ -597,20 +667,26 @@
   }
 
   .catalog-tools {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     align-items: stretch;
-    border-radius: 20px;
+    border-radius: 8px;
     padding: 12px;
     gap: 10px;
   }
 
   .catalog-search {
     width: 100%;
-    min-height: 38px;
+    min-height: 48px;
+  }
+
+  .catalog-search-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
   }
 
   .catalog-filter-row {
-    flex-direction: column;
+    flex-direction: row;
     align-items: stretch;
     width: 100%;
     gap: 8px;
@@ -624,7 +700,7 @@
   .catalog-select,
   .catalog-reset {
     width: 100%;
-    min-height: 38px;
+    min-height: 44px;
   }
 
   .catalog-select {
@@ -989,4 +1065,3 @@
     height: 14px;
   }
 }
-
