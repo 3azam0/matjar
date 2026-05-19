@@ -14,6 +14,7 @@ const ArrowUpSVG = () => (
 
 export function FloatingWhatsApp({ phoneNumber = '201121030583' }) {
   const [isVisible, setIsVisible] = useState(false);
+  const hasPhone = Boolean(String(phoneNumber || '').replace(/[^\d]/g, ''));
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 2000);
@@ -39,16 +40,18 @@ export function FloatingWhatsApp({ phoneNumber = '201121030583' }) {
 
   return (
     <div className="floating-widgets-container">
-      <a
-        href={`https://wa.me/${phoneNumber}`}
-        className={`floating-whatsapp ${isVisible ? 'is-visible' : ''}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="تواصل معنا على واتساب"
-      >
-        <span className="floating-whatsapp-pulse" aria-hidden="true" />
-        <WhatsAppSVG />
-      </a>
+      {hasPhone ? (
+        <a
+          href={`https://wa.me/${phoneNumber}`}
+          className={`floating-whatsapp ${isVisible ? 'is-visible' : ''}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="تواصل معنا على واتساب"
+        >
+          <span className="floating-whatsapp-pulse" aria-hidden="true" />
+          <WhatsAppSVG />
+        </a>
+      ) : null}
 
       <button
         onClick={scrollToTop}

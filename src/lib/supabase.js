@@ -5,6 +5,8 @@ const envKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 
 /** True when real project credentials are set (not placeholder). */
 export const SUPABASE_CONFIGURED = Boolean(envUrl && envKey);
+export const SUPABASE_CONTENT_ENABLED = SUPABASE_CONFIGURED
+  && import.meta.env.VITE_CONTENT_SOURCE === 'supabase';
 
 if (!SUPABASE_CONFIGURED) {
   console.warn(

@@ -11,13 +11,17 @@ import { CATALOG_WHATSAPP, catalogCategories as localCategories } from '../data/
 import { api, withRetry } from '../services/api';
 import { supabase } from '../lib/supabase';
 import { getProductAddedTime } from '../lib/productSort.js';
+import { CLIENT_KEYS, activeClient } from '../config/clients.js';
 import '../App.css';
 import './CatalogPage.css';
 import '../styles/ErrorDisplay.css';
 
 function whatsappHref(productName, categoryTitle, whatsappNumber) {
-  const text = `السلام عليكم، أستفسر عن: ${productName} (${categoryTitle}) — سحر الشرق`;
-  return `https://wa.me/${whatsappNumber || CATALOG_WHATSAPP}?text=${encodeURIComponent(text)}`;
+  const fallbackPhone = activeClient.key === CLIENT_KEYS.SAHAR_ALSHARQ ? CATALOG_WHATSAPP : '';
+  const phone = whatsappNumber || activeClient.catalogWhatsapp || fallbackPhone;
+  if (!phone) return null;
+  const text = `السلام عليكم، أستفسر عن: ${productName} (${categoryTitle}) — ${activeClient.displayName}`;
+  return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 }
 
 function normalizeSearchText(value) {
@@ -38,6 +42,7 @@ function ProductCard({ product, categoryTitle, whatsappNumber, onImageClick }) {
     [product.images]
   );
   const currentImage = images[currentIdx];
+  const inquiryHref = whatsappHref(product.name, categoryTitle, whatsappNumber);
 
   useEffect(() => {
     if (!images.length) return;
@@ -131,15 +136,17 @@ function ProductCard({ product, categoryTitle, whatsappNumber, onImageClick }) {
         </div>
         <p className="catalog-product-description">{product.description ?? ''}</p>
         {product.note ? <p className="catalog-product-note">{product.note}</p> : null}
-        <a
-          href={whatsappHref(product.name, categoryTitle, whatsappNumber)}
-          className="catalog-product-cta"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <MessageCircle size={18} aria-hidden />
-          <span>استفسار واتساب</span>
-        </a>
+        {inquiryHref ? (
+          <a
+            href={inquiryHref}
+            className="catalog-product-cta"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <MessageCircle size={18} aria-hidden />
+            <span>استفسار واتساب</span>
+          </a>
+        ) : null}
       </div>
     </li>
   );
@@ -152,7 +159,7 @@ function Lightbox({ activeLightbox, onClose }) {
   const touchRef = useRef({ startX: 0, startY: 0, isDragging: false });
 
   useEffect(() => {
-    setCurrentIdx(currentIndex);
+    queueMicrotask(() => setCurrentIdx(currentIndex));
   }, [currentIndex]);
 
   // Lock body scroll when lightbox is open
@@ -232,7 +239,7 @@ function Lightbox({ activeLightbox, onClose }) {
     e.stopPropagation();
     const shareData = {
       title: productName,
-      text: `${productName} — سحر الشرق`,
+      text: `${productName} — ${activeClient.displayName}`,
       url: window.location.href,
     };
 
@@ -240,7 +247,7 @@ function Lightbox({ activeLightbox, onClose }) {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        await navigator.clipboard.writeText(`${productName} — سحر الشرق\n${window.location.href}`);
+        await navigator.clipboard.writeText(`${productName} — ${activeClient.displayName}\n${window.location.href}`);
         setShareToast(true);
         setTimeout(() => setShareToast(false), 2000);
       }
@@ -308,7 +315,9 @@ export function CatalogPage() {
   const [activeId, setActiveId] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
-  const [whatsappNumber, setWhatsappNumber] = useState(CATALOG_WHATSAPP);
+  const defaultWhatsapp = activeClient.catalogWhatsapp
+    || (activeClient.key === CLIENT_KEYS.SAHAR_ALSHARQ ? CATALOG_WHATSAPP : '');
+  const [whatsappNumber, setWhatsappNumber] = useState(defaultWhatsapp);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date-desc');
   const [activeLightbox, setActiveLightbox] = useState(null);

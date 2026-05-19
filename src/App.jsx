@@ -1,8 +1,9 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { CatalogPage } from './pages/CatalogPage.jsx';
 import { HomePage } from './pages/HomePage.jsx';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp.jsx';
+import { activeClient, applyClientDocumentMeta } from './config/clients.js';
 
 const AdminApp = lazy(() => import('./admin/AdminApp.jsx').then((m) => ({ default: m.AdminApp })));
 
@@ -17,6 +18,10 @@ function AdminFallback() {
 export default function App() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
+
+  useEffect(() => {
+    applyClientDocumentMeta(activeClient);
+  }, []);
 
   return (
     <>
@@ -33,7 +38,7 @@ export default function App() {
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      {!isAdmin && <FloatingWhatsApp />}
+      {!isAdmin && <FloatingWhatsApp phoneNumber={activeClient.settings.hero_whatsapp} />}
     </>
   );
 }

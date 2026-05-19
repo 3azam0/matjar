@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { api, withRetry } from '../services/api';
 import { supabase } from '../lib/supabase';
+import { activeClient } from '../config/clients.js';
 
 const WhatsAppIcon = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -37,24 +38,9 @@ const Divider = () => (
   </div>
 );
 
-const DEFAULT_SETTINGS = {
-  hero_title: 'سحر الشرق',
-  hero_whatsapp: '201121030583',
-  contact_email: 'sahar.alsharq@gmail.com',
-  social_instagram: 'https://www.instagram.com/sahar_alsharq2022',
-  social_facebook: 'https://www.facebook.com/share/1AktcGb6b5/',
-};
+const DEFAULT_SETTINGS = activeClient.settings;
 
-const DEFAULT_BRANCHES = [
-  {
-    name: 'فرع الموسكي',
-    address: ['٤٢ شارع الموسكي الاول', 'بجانب عمارة نص الدنيا'],
-  },
-  {
-    name: 'فرع الأزهر',
-    address: ['١٠٢ شارع الأزهر الرئيسي', 'بجانب مول الدرديري'],
-  }
-];
+const DEFAULT_BRANCHES = activeClient.branches;
 
 function digitsOnly(value) {
   return String(value || '').replace(/[^\d]/g, '');
@@ -76,6 +62,7 @@ export function SiteFooter() {
           contact_email: sData.contact_email || prev.contact_email,
           social_instagram: sData.social_instagram || prev.social_instagram,
           social_facebook: sData.social_facebook || prev.social_facebook,
+          social_tiktok: sData.social_tiktok || prev.social_tiktok,
         }));
       }
 
@@ -96,7 +83,7 @@ export function SiteFooter() {
   }
 
   useEffect(() => {
-    fetchFooterData();
+    queueMicrotask(fetchFooterData);
 
     // Subscribe to settings changes
     const settingsChannel = supabase
@@ -130,14 +117,14 @@ export function SiteFooter() {
         <div className="footer-item">
           <Phone />
           <div>
-            <strong>{settings.hero_whatsapp}</strong>
+            <strong>{settings.hero_whatsapp || 'سيتم إضافة رقم التواصل'}</strong>
             <span>تواصلي معنا</span>
           </div>
         </div>
         <div className="footer-item">
           <Mail />
           <div>
-            <strong>{settings.contact_email}</strong>
+            <strong>{settings.contact_email || 'سيتم إضافة البريد الإلكتروني'}</strong>
             <span>راسلينا</span>
           </div>
         </div>
@@ -154,21 +141,29 @@ export function SiteFooter() {
       </div>
 
       <div className="footer-social-row">
-        <a href={`https://wa.me/${settings.hero_whatsapp}`} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
-          <WhatsAppIcon />
-        </a>
-        <a href={settings.social_instagram} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="إنستغرام">
-          <InstagramIcon />
-        </a>
-        <a href={settings.social_facebook} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك">
-          <FacebookIcon />
-        </a>
-        <a href="https://www.tiktok.com/@saheralshark" className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="تيك توك">
-          <TikTokIcon />
-        </a>
+        {settings.hero_whatsapp ? (
+          <a href={`https://wa.me/${settings.hero_whatsapp}`} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+            <WhatsAppIcon />
+          </a>
+        ) : null}
+        {settings.social_instagram ? (
+          <a href={settings.social_instagram} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="إنستغرام">
+            <InstagramIcon />
+          </a>
+        ) : null}
+        {settings.social_facebook ? (
+          <a href={settings.social_facebook} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="فيسبوك">
+            <FacebookIcon />
+          </a>
+        ) : null}
+        {settings.social_tiktok ? (
+          <a href={settings.social_tiktok} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="تيك توك">
+            <TikTokIcon />
+          </a>
+        ) : null}
       </div>
 
-      <p className="copyright">© {new Date().getFullYear()} {settings.hero_title} للعبايات الشرقية والخليجية</p>
+      <p className="copyright">© {new Date().getFullYear()} {settings.hero_title}. جميع الحقوق محفوظة</p>
       <Divider />
       <p className="footer-credits">تصميم وتطوير محمد أبو العزم | جميع الحقوق محفوظة</p>
     </footer>

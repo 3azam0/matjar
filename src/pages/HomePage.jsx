@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowUp,
   Award,
   BookOpen,
   Clock,
@@ -15,13 +14,11 @@ import {
 } from 'lucide-react';
 import { SiteHeader } from '../components/SiteHeader';
 import { SiteFooter } from '../components/SiteFooter';
-import { LoadingSpinner } from '../components/LoadingSpinner';
-import { ErrorDisplay } from '../components/ErrorDisplay';
 import { ContactForm } from '../components/ContactForm';
 import { useNotification } from '../lib/NotificationContext';
 import { api, withRetry } from '../services/api';
 import { supabase } from '../lib/supabase';
-import brandLogo from '../assets/logo-old.png';
+import { activeClient } from '../config/clients.js';
 import '../App.css';
 import '../styles/ErrorDisplay.css';
 
@@ -119,6 +116,14 @@ const SOCIAL_ICONS = {
   catalog: <BookOpen />,
 };
 
+function withSocialIcons(links = []) {
+  return links.map((link) => ({
+    ...link,
+    cls: link.cls || link.type,
+    icon: SOCIAL_ICONS[link.cls || link.type] || <MessageCircle />,
+  }));
+}
+
 const Divider = () => (
   <div className="divider" aria-hidden="true">
     <span />
@@ -143,67 +148,19 @@ const HeroFlourish = () => (
   </svg>
 );
 
-const DEFAULT_FEATURES = [
-  { icon: <Award />, title: 'جودة عالية', sub: 'خامات مختارة بعناية' },
-  { icon: <Shirt />, title: 'تصميم راقي', sub: 'عبايات شرقية وخليجية' },
-  { icon: <Truck />, title: 'شحن سريع', sub: 'لكافة أنحاء مصر' },
-  { icon: <Headset />, title: 'خدمة عملاء', sub: 'دعم سريع واهتمام دائم' },
-];
+const DEFAULT_FEATURES = activeClient.features.map((feature) => ({
+  ...feature,
+  icon: ICON_MAP[feature.icon] || <Award />,
+  sub: feature.sub || feature.description || '',
+}));
 
-const DEFAULT_BRANCHES = [
-  {
-    name: 'فرع الموسكي',
-    address: ['٤٢ شارع الموسكي الاول', 'بجانب عمارة نص الدنيا'],
-    phone: '01121030583',
-    phoneTel: '+201121030583',
-    mobile_1: '01121030583',
-    mobile_2: '',
-    landline: '',
-    mapSearchQuery: 'https://maps.app.goo.gl/a3DKXyoQhqs4oFgK6?g_st=iw',
-    links: [
-      { cls: 'whatsapp', icon: SOCIAL_ICONS.whatsapp, label: 'واتساب', href: 'https://wa.me/201121030583' },
-      {
-        cls: 'instagram',
-        icon: SOCIAL_ICONS.instagram,
-        label: 'إنستغرام',
-        href: 'https://www.instagram.com/sahar_alsharq2022?igsh=bTI4enlpdTBiMjJm',
-      },
-      { cls: 'facebook', icon: SOCIAL_ICONS.facebook, label: 'فيسبوك', href: 'https://www.facebook.com/share/1AktcGb6b5/' },
-      { cls: 'tiktok', icon: SOCIAL_ICONS.tiktok, label: 'تيك توك', href: 'https://www.tiktok.com/@saheralshark?_r=1&_t=ZS-95OeCXIIrqs' },
-      { cls: 'catalog', icon: SOCIAL_ICONS.catalog, label: 'الكتالوج', to: '/catalog' },
-    ],
-  },
-  {
-    name: 'فرع الأزهر',
-    address: ['١٠٢ شارع الأزهر الرئيسي', 'بجانب مول الدرديري'],
-    phone: '01050379643',
-    phoneTel: '+201050379643',
-    mobile_1: '01050379643',
-    mobile_2: '',
-    landline: '',
-    mapSearchQuery: '١٠٢ شارع الأزهر الرئيسي، بجانب مول الدرديري، القاهرة، مصر',
-    links: [
-      { cls: 'whatsapp', icon: SOCIAL_ICONS.whatsapp, label: 'واتساب', href: 'https://wa.me/201050379643' },
-      { cls: 'facebook', icon: SOCIAL_ICONS.facebook, label: 'فيسبوك', href: 'https://www.facebook.com/share/1EZ4bP3t9M/?mibextid=wwXIfr' },
-      { cls: 'tiktok', icon: SOCIAL_ICONS.tiktok, label: 'تيك توك', href: 'https://www.tiktok.com/@sehr_elsharq?_r=1&_t=ZS-96HIj9Lx99U' },
-      { cls: 'catalog', icon: SOCIAL_ICONS.catalog, label: 'الكتالوج', to: '/catalog' },
-    ],
-  },
-].map((b) => ({ ...b, ...mapsUrlsFromSearchQuery(b.mapSearchQuery) }));
+const DEFAULT_BRANCHES = activeClient.branches.map((branch) => ({
+  ...branch,
+  links: withSocialIcons(branch.links),
+  ...mapsUrlsFromSearchQuery(branch.mapSearchQuery || branch.address?.join('، ') || 'القاهرة، مصر'),
+}));
 
-const DEFAULT_SETTINGS = {
-  hero_title: 'سحر الشرق',
-  hero_subtitle: 'للعبايات الشرقية والخليجية',
-  hero_tagline: 'أناقتك .. سر تميزك',
-  hero_desc_1: 'عبايات فاخرة بتصميم شرقي وخليجي',
-  hero_desc_2: 'خامات مميزة .. تفاصيل راقية',
-  hero_whatsapp: '201121030583',
-  hero_image: '',
-  hero_images: [],
-  contact_email: 'sahar.alsharq@gmail.com',
-  hours_weekday: 'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
-  hours_friday: 'الأحد: 12:00 م - 8:00 م',
-};
+const DEFAULT_SETTINGS = activeClient.settings;
 
 function digitsOnly(value) {
   return String(value || '').replace(/[^\d]/g, '');
@@ -223,12 +180,12 @@ function mapSettings(settings) {
 }
 
 export function HomePage() {
-  const { showError, showWarning } = useNotification();
+  const { showError } = useNotification();
   const [features, setFeatures] = useState(DEFAULT_FEATURES);
   const [branches, setBranches] = useState(DEFAULT_BRANCHES);
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadError, setLoadError] = useState(null);
+  const [, setIsLoading] = useState(true);
+  const [, setLoadError] = useState(null);
   const [heroIndex, setHeroIndex] = useState(0);
 
   // Get hero images from either hero_images array or legacy hero_image
@@ -252,10 +209,10 @@ export function HomePage() {
 
   // Reset to first slide when images change
   useEffect(() => {
-    setHeroIndex(0);
+    queueMicrotask(() => setHeroIndex(0));
   }, [settings.hero_images, settings.hero_image]);
 
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
     setLoadError(null);
 
@@ -340,10 +297,10 @@ export function HomePage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [showError]);
 
   useEffect(() => {
-    fetchData();
+    queueMicrotask(fetchData);
 
     // Subscribe to real-time site_settings changes
     const settingsSubscription = supabase
@@ -411,7 +368,7 @@ export function HomePage() {
       branchesSubscription.unsubscribe();
       branchLinksSubscription.unsubscribe();
     };
-  }, []);
+  }, [fetchData]);
 
   return (
     <>
@@ -422,7 +379,7 @@ export function HomePage() {
 
           <div className="hero-shell">
             <div className="hero-copy">
-              <img src={brandLogo} alt={settings.hero_title} className="brand-logo" />
+              <img src={activeClient.logo} alt={settings.hero_title} className="brand-logo" />
               <h1>{settings.hero_title}</h1>
               <p className="brand-subtitle">{settings.hero_subtitle}</p>
               <HeroFlourish />
@@ -431,18 +388,20 @@ export function HomePage() {
                 <p>{settings.hero_desc_1}</p>
                 <p>{settings.hero_desc_2}</p>
               </div>
-              <a
-                href={`https://wa.me/${settings.hero_whatsapp}`}
-                className="hero-cta"
-                target="_blank"
-                rel="noopener noreferrer"
-                dir="rtl"
-              >
-                <span className="hero-cta-icon" aria-hidden="true">
-                  <WhatsAppIcon size={22} />
-                </span>
-                <span>تواصل معنا</span>
-              </a>
+              {settings.hero_whatsapp ? (
+                <a
+                  href={`https://wa.me/${settings.hero_whatsapp}`}
+                  className="hero-cta"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  dir="rtl"
+                >
+                  <span className="hero-cta-icon" aria-hidden="true">
+                    <WhatsAppIcon size={22} />
+                  </span>
+                  <span>تواصل معنا</span>
+                </a>
+              ) : null}
               <Link to="/catalog" className="hero-catalog-link">
                 تصفحي الكتالوج
               </Link>
@@ -477,7 +436,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <section className="features-section reveal" aria-label="مميزات سحر الشرق">
+        <section className="features-section reveal" aria-label={`مميزات ${settings.hero_title}`}>
           <div className="features-panel">
             {features.map(({ icon, title, sub }) => (
               <div className="feature-item" key={title}>

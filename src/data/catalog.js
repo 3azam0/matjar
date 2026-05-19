@@ -23,7 +23,7 @@ export const catalogCategories = [
       },
       {
         id: 'oriental-2',
-        name: 'سحر الشرق اليومية',
+        name: 'العباية اليومية',
         description: 'عباية عملية بتصميم انسيابي مريح، مثالية للعمل والخروجات اليومية بلمسة جمالية هادئة.',
         images: [
           'https://images.unsplash.com/photo-1594300062811-de3996701fe8?auto=format&fit=crop&q=80&w=800',

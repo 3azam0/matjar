@@ -1,9 +1,9 @@
 import { supabase } from '../lib/supabase';
-import { SUPABASE_CONFIGURED } from '../lib/supabase';
+import { SUPABASE_CONTENT_ENABLED } from '../lib/supabase';
 import { compareProductsNewestFirst } from '../lib/productSort.js';
 
 /**
- * API Service for Sahar Alsharq
+ * API Service for storefront content
  * Handles all communication with Supabase with comprehensive error handling
  */
 
@@ -44,8 +44,8 @@ async function withRetry(fn, maxRetries = 3) {
 export const api = {
   // --- Site Settings ---
   async getSettings() {
-    if (!SUPABASE_CONFIGURED) {
-      console.warn('Supabase not configured, returning null settings');
+    if (!SUPABASE_CONTENT_ENABLED) {
+      console.warn('Supabase content disabled, returning null settings');
       return null;
     }
 
@@ -72,8 +72,8 @@ export const api = {
 
   // --- Features ---
   async getFeatures() {
-    if (!SUPABASE_CONFIGURED) {
-      console.warn('Supabase not configured, returning empty features');
+    if (!SUPABASE_CONTENT_ENABLED) {
+      console.warn('Supabase content disabled, returning empty features');
       return [];
     }
 
@@ -99,8 +99,8 @@ export const api = {
 
   // --- Branches & Locations ---
   async getBranches() {
-    if (!SUPABASE_CONFIGURED) {
-      console.warn('Supabase not configured, returning empty branches');
+    if (!SUPABASE_CONTENT_ENABLED) {
+      console.warn('Supabase content disabled, returning empty branches');
       return [];
     }
 
@@ -125,8 +125,8 @@ export const api = {
   },
 
   async getBranchLinks() {
-    if (!SUPABASE_CONFIGURED) {
-      console.warn('Supabase not configured, returning empty branch links');
+    if (!SUPABASE_CONTENT_ENABLED) {
+      console.warn('Supabase content disabled, returning empty branch links');
       return [];
     }
 
@@ -152,8 +152,8 @@ export const api = {
 
   // --- Catalog: Categories & Products ---
   async getCatalog() {
-    if (!SUPABASE_CONFIGURED) {
-      console.warn('Supabase not configured, returning empty catalog');
+    if (!SUPABASE_CONTENT_ENABLED) {
+      console.warn('Supabase content disabled, returning empty catalog');
       return [];
     }
 
@@ -202,8 +202,8 @@ export const api = {
 
   // --- Contact / Inquiries ---
   async submitInquiry(inquiryData) {
-    if (!SUPABASE_CONFIGURED) {
-      console.warn('Supabase not configured, inquiry not submitted');
+    if (!SUPABASE_CONTENT_ENABLED) {
+      console.warn('Supabase content disabled, inquiry not submitted');
       return null;
     }
 
