@@ -1,0 +1,56 @@
+/* Add / edit / save toolbar buttons (works with adminTheme + custom toolbars) */
+
+.ra-admin-root .admin-form-toolbar .RaToolbar-root {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.65rem;
+}
+
+.ra-admin-root .admin-form-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+/* Back / cancel — list button styled as outline */
+.ra-admin-root .admin-btn-back.MuiButton-root,
+.ra-admin-root .admin-btn-back.MuiButton-root:hover {
+  background: #fffbf6 !important;
+  color: #8b672b !important;
+  border: 1px solid #d4bc8d !important;
+  box-shadow: none !important;
+}
+
+.ra-admin-root .admin-btn-back.MuiButton-root:hover {
+  background: rgba(179, 142, 77, 0.1) !important;
+  border-color: #b38e4d !important;
+  transform: translateY(-1px);
+}
+
+/* Top toolbar create in lists */
+.ra-admin-root .RaListToolbar-root {
+  padding: 0.5rem 0;
+}
+
+.ra-admin-root .RaListToolbar-root .RaCreateButton-root {
+  margin-inline-start: auto;
+}
+
+/* Datagrid row edit icon button */
+.ra-admin-root .RaDatagrid-root .RaEditButton-root {
+  opacity: 0.85;
+}
+
+.ra-admin-root .RaDatagrid-root tr:hover .RaEditButton-root {
+  opacity: 1;
+}
+
+/* Show edit button column when using admin datagrid helper */
+.ra-admin-root .admin-datagrid-actions {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+}

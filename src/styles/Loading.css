@@ -1,0 +1,115 @@
+/* Loading Spinner */
+
+.loading-spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  min-height: 200px;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  color: #666;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner-text {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Skeleton Loaders */
+
+.skeleton-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.skeleton-product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: #f9fafb;
+}
+
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 0.375rem;
+}
+
+.skeleton-title {
+  height: 1rem;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 0.25rem;
+  width: 80%;
+}
+
+.skeleton-text {
+  height: 0.75rem;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  border-radius: 0.25rem;
+  width: 100%;
+}
+
+.skeleton-text-short {
+  width: 60%;
+}
+
+.skeleton-text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .skeleton-products {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .skeleton-products {
+    grid-template-columns: 1fr;
+  }
+
+  .loading-spinner-container {
+    min-height: 150px;
+  }
+}
