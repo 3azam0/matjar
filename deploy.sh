@@ -26,6 +26,10 @@ fi
 
 echo "🚀 Starting deployment to environment: $ENV (Branch: $BRANCH)..."
 
+# 0. Set up environment
+echo "⚙️ Copying env.sahar to .env..."
+cp env.sahar .env
+
 # 1. Build the project
 echo "📦 Building the project..."
 npm run build
