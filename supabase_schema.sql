@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
   social_whatsapp text DEFAULT '',
   hero_image text DEFAULT '',
   products_per_page integer NOT NULL DEFAULT 12,
+  hours_weekday text DEFAULT 'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
+  hours_friday text DEFAULT 'الأحد: 12:00 م - 8:00 م',
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
@@ -30,6 +32,8 @@ ALTER TABLE public.site_settings
   ADD COLUMN IF NOT EXISTS social_whatsapp text DEFAULT '',
   ADD COLUMN IF NOT EXISTS hero_image text DEFAULT '',
   ADD COLUMN IF NOT EXISTS products_per_page integer NOT NULL DEFAULT 12,
+  ADD COLUMN IF NOT EXISTS hours_weekday text DEFAULT 'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
+  ADD COLUMN IF NOT EXISTS hours_friday text DEFAULT 'الأحد: 12:00 م - 8:00 م',
   ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
   ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
 
@@ -105,7 +109,7 @@ BEGIN
     SELECT 1
     FROM pg_constraint
     WHERE conname = 'branch_links_branch_id_fkey'
-      AND conrelid = 'public.branch_links'::regclass
+      AND conrelid = to_regclass('public.branch_links')
   ) THEN
     ALTER TABLE public.branch_links
       ADD CONSTRAINT branch_links_branch_id_fkey
@@ -160,7 +164,7 @@ BEGIN
     SELECT 1
     FROM pg_constraint
     WHERE conname = 'products_category_id_fkey'
-      AND conrelid = 'public.products'::regclass
+      AND conrelid = to_regclass('public.products')
   ) THEN
     ALTER TABLE public.products
       ADD CONSTRAINT products_category_id_fkey

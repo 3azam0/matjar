@@ -1,15 +1,22 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Award,
   BookOpen,
   Clock,
+  Gem,
+  Gift,
   Headset,
+  Layers,
   Mail,
   MapPin,
   MessageCircle,
   Phone,
+  RefreshCw,
+  Scissors,
   Shirt,
+  ShoppingBag,
+  Sparkles,
   Truck,
 } from 'lucide-react';
 import { SiteHeader } from '../components/SiteHeader';
@@ -33,6 +40,8 @@ const ICON_MAP = {
   Mail: <Mail />,
   MapPin: <MapPin />,
   Clock: <Clock />,
+  Gift: <Gift />,
+  RefreshCw: <RefreshCw />,
 };
 
 /** Stable Google Maps links for browsers, iOS, and Android (opens Maps app when installed). */
@@ -44,6 +53,14 @@ function mapsUrlsFromSearchQuery(query) {
       return {
         mapUrl: 'https://maps.app.goo.gl/a3DKXyoQhqs4oFgK6',
         mapEmbedUrl: `https://www.google.com/maps?q=${q}&ftid=0x1458410585ac478b:0x975302c7592517c7&output=embed&hl=ar&z=17`,
+      };
+    }
+    // Al Rukn Al Yamani - Main branch
+    if (query.includes('NFi5pMAvHWVVFDnKA')) {
+      const q = encodeURIComponent('الركن اليماني، 6 حارة النوبي، الموسكي، القاهرة');
+      return {
+        mapUrl: 'https://maps.app.goo.gl/NFi5pMAvHWVVFDnKA',
+        mapEmbedUrl: `https://www.google.com/maps?q=${q}&output=embed&hl=ar&z=17`,
       };
     }
     // Generic fallback for maps short URLs
@@ -162,6 +179,55 @@ const DEFAULT_BRANCHES = activeClient.branches.map((branch) => ({
 
 const DEFAULT_SETTINGS = activeClient.settings;
 
+const CATEGORY_ICON_MAP = {
+  'category-new': <Sparkles />,
+  'category-prayer': <Shirt />,
+  'category-luxury': <Gem />,
+  'category-hijabs': <Layers />,
+  'category-beads': <Gift />,
+  'oriental-abayas': <Shirt />,
+  'gulf-abayas': <Award />,
+  casual: <ShoppingBag />,
+};
+
+const FALLBACK_NEW_ARRIVALS = [
+  {
+    id: 'alrukn-arrival-1',
+    name: 'عبايات خليجية فاخرة',
+    description: 'قصات راقية وخامات مختارة بعناية',
+    note: 'متوفر الآن',
+    images: [],
+  },
+  {
+    id: 'alrukn-arrival-2',
+    name: 'مجموعات الصلاة',
+    description: 'راحة يومية بتفاصيل هادئة',
+    note: 'تشكيلة مميزة',
+    images: [],
+  },
+  {
+    id: 'alrukn-arrival-3',
+    name: 'طرح وأقمشة',
+    description: 'ألوان منسقة مع الإطلالة',
+    note: 'اختيارات متعددة',
+    images: [],
+  },
+  {
+    id: 'alrukn-arrival-4',
+    name: 'سبحات وملحقات',
+    description: 'لمسات تكمل أناقتك',
+    note: 'وصل حديثاً',
+    images: [],
+  },
+  {
+    id: 'alrukn-arrival-5',
+    name: 'تصاميم للمناسبات',
+    description: 'حضور فاخر للمناسبات الخاصة',
+    note: 'اطلبي التفاصيل',
+    images: [],
+  },
+];
+
 function digitsOnly(value) {
   return String(value || '').replace(/[^\d]/g, '');
 }
@@ -184,9 +250,22 @@ export function HomePage() {
   const [features, setFeatures] = useState(DEFAULT_FEATURES);
   const [branches, setBranches] = useState(DEFAULT_BRANCHES);
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+  const [categories, setCategories] = useState(activeClient.categories || []);
   const [, setIsLoading] = useState(true);
   const [, setLoadError] = useState(null);
   const [heroIndex, setHeroIndex] = useState(0);
+
+  const displayProducts = useMemo(() => {
+    const products = categories.flatMap((cat) => (
+      (cat.products || []).map((product) => ({
+        ...product,
+        categoryTitle: cat.title,
+        categoryDescription: cat.description,
+      }))
+    ));
+
+    return products.length > 0 ? products.slice(0, 5) : FALLBACK_NEW_ARRIVALS;
+  }, [categories]);
 
   // Get hero images from either hero_images array or legacy hero_image
   const heroImages = (Array.isArray(settings.hero_images) && settings.hero_images.length > 0)
@@ -283,6 +362,16 @@ export function HomePage() {
             };
           })
         );
+      }
+
+      // Fetch Catalog with retry
+      try {
+        const catalogData = await withRetry(() => api.getCatalog());
+        if (catalogData && catalogData.length > 0) {
+          setCategories(catalogData);
+        }
+      } catch (catErr) {
+        console.error('Error fetching catalog data on home page:', catErr);
       }
     } catch (err) {
       console.error('Error fetching home page data:', err);
@@ -399,7 +488,7 @@ export function HomePage() {
                   <span className="hero-cta-icon" aria-hidden="true">
                     <WhatsAppIcon size={22} />
                   </span>
-                  <span>تواصل معنا</span>
+                  <span>اطلبي عبر واتساب</span>
                 </a>
               ) : null}
               <Link to="/catalog" className="hero-catalog-link">
@@ -450,13 +539,118 @@ export function HomePage() {
           </div>
         </section>
 
+        {/* ─── Categories Showcase ─── */}
+        {/* <section className="categories-showcase section-shell reveal" id="categories">
+          <header className="section-header">
+            <Divider />
+            <h2>تسوقي حسب التصنيف</h2>
+          </header>
+          <div className="categories-grid">
+            {categories.map((cat) => (
+              <Link 
+                key={cat.id} 
+                to={`/catalog?category=${cat.id}`} 
+                className="category-card"
+              >
+                <div className="category-icon-wrapper" aria-hidden="true">
+                  {CATEGORY_ICON_MAP[cat.id] || <ShoppingBag />}
+                </div>
+                <h3>{cat.title}</h3>
+                {cat.description ? <p>{cat.description}</p> : null}
+                <span className="category-card-link">تسوقي الآن</span>
+              </Link>
+            ))}
+          </div>
+        </section> */}
+
+        {/* ─── About Brand Section ─── */}
+        <section className="about-brand-section section-shell reveal" id="about">
+          <div className="about-brand-layout">
+            {/* Left Card: Story */}
+            <div className="about-story-card">
+              <span className="about-brand-tag">{activeClient.displayName}</span>
+              <h3>جودة تراثية.. وأناقة عصرية</h3>
+              <p>
+                نقدم لكِ أجمل العبايات الخليجية المصممة بعناية من أفخم الأقمشة وعلى معايير الجودة لتكون خيارك الأول في الأناقة والراحة.
+              </p>
+              <Link to="/catalog" className="about-story-btn">
+                تعرفي على المزيد
+              </Link>
+            </div>
+
+            {/* Center: Decorative Circular Logo */}
+            <div className="about-logo-center">
+              <div className="about-logo-circle">
+                <img src={activeClient.logo} alt={activeClient.displayName} />
+              </div>
+            </div>
+
+            {/* Right Card: Core Values */}
+            <div className="about-values-card">
+              <div className="about-value-item">
+                <div className="value-icon"><Scissors size={24} /></div>
+                <div className="value-info">
+                  <h4>تصاميم عصرية</h4>
+                  <p>بتفاصيل راقية</p>
+                </div>
+              </div>
+              <div className="about-value-item">
+                <div className="value-icon"><Layers size={24} /></div>
+                <div className="value-info">
+                  <h4>أقمشة فاخرة</h4>
+                  <p>مختارة بعناية</p>
+                </div>
+              </div>
+              <div className="about-value-item">
+                <div className="value-icon"><Award size={24} /></div>
+                <div className="value-info">
+                  <h4>كفالة وجودة عالية</h4>
+                  <p>في كل قطعة</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── New Arrivals Showcase ─── */}
+        {/* <section className="new-arrivals-section section-shell reveal" id="new-arrivals">
+          <header className="section-header">
+            <Divider />
+            <h2>وصل حديثاً</h2>
+          </header>
+          <div className="new-arrivals-grid">
+            {displayProducts.map((product) => (
+              <Link 
+                key={product.id} 
+                to="/catalog" 
+                className="new-arrival-card"
+              >
+                <div className="new-arrival-image">
+                  {product.images && product.images[0] ? (
+                    <img src={product.images[0]} alt={product.name} />
+                  ) : (
+                    <div className="new-arrival-placeholder">
+                      <Sparkles size={28} aria-hidden />
+                      <span>{product.name}</span>
+                    </div>
+                  )}
+                </div>
+                <div className="new-arrival-info">
+                  <h3>{product.name}</h3>
+                  <p className="new-arrival-note">{product.note}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section> */}
+
         <section className="social-section section-shell reveal" id="social">
           <header className="section-header">
             <Divider />
             <h2>تابعينا وتواصلي معنا</h2>
           </header>
 
-          <div className="branch-social-grid">
+          <div className={`branch-social-grid ${branches.length === 1 ? 'single-branch' : ''}`}>
             {branches.map(({ name, address, mapUrl, links }) => (
               <article className="branch-social-card" key={name}>
                 <h3>{name}</h3>

@@ -7,18 +7,17 @@ import { ErrorDisplay } from '../components/ErrorDisplay';
 import { OptimizedImage } from '../components/OptimizedImage';
 import { preloadImage } from '../components/imageCache';
 import { useNotification } from '../lib/NotificationContext';
-import { CATALOG_WHATSAPP, catalogCategories as localCategories } from '../data/catalog';
+import { catalogCategories as localCategories } from '../data/catalog';
 import { api, withRetry } from '../services/api';
 import { supabase } from '../lib/supabase';
 import { getProductAddedTime } from '../lib/productSort.js';
-import { CLIENT_KEYS, activeClient } from '../config/clients.js';
+import { activeClient } from '../config/clients.js';
 import '../App.css';
 import './CatalogPage.css';
 import '../styles/ErrorDisplay.css';
 
 function whatsappHref(productName, categoryTitle, whatsappNumber) {
-  const fallbackPhone = activeClient.key === CLIENT_KEYS.SAHAR_ALSHARQ ? CATALOG_WHATSAPP : '';
-  const phone = whatsappNumber || activeClient.catalogWhatsapp || fallbackPhone;
+  const phone = whatsappNumber || activeClient.catalogWhatsapp || '';
   if (!phone) return null;
   const text = `السلام عليكم، أستفسر عن: ${productName} (${categoryTitle}) — ${activeClient.displayName}`;
   return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
@@ -331,8 +330,7 @@ export function CatalogPage() {
   const [activeId, setActiveId] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
-  const defaultWhatsapp = activeClient.catalogWhatsapp
-    || (activeClient.key === CLIENT_KEYS.SAHAR_ALSHARQ ? CATALOG_WHATSAPP : '');
+  const defaultWhatsapp = activeClient.catalogWhatsapp || '';
   const [whatsappNumber, setWhatsappNumber] = useState(defaultWhatsapp);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date-desc');

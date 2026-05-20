@@ -1,20 +1,34 @@
 -- ============================================
--- Seed Data for Sahar Alsharq
--- Populate tables with default website data
+-- Seed Data for Al Rukn Al Yamani (الركن اليماني)
+-- Populate tables with client website settings, branches,
+-- categories, and premium products.
 -- ============================================
 
--- 1. Insert Site Settings
-INSERT INTO public.site_settings (id, site_name, site_description, contact_email, contact_phone, social_facebook, social_instagram, social_whatsapp, hero_image, products_per_page, hours_weekday, hours_friday)
+-- 1. Insert/Update Site Settings
+INSERT INTO public.site_settings (
+  id,
+  site_name,
+  site_description,
+  contact_email,
+  contact_phone,
+  social_facebook,
+  social_instagram,
+  social_whatsapp,
+  hero_image,
+  products_per_page,
+  hours_weekday,
+  hours_friday
+)
 VALUES (
   'default-settings',
-  'سحر الشرق',
-  'للعبايات الشرقية والخليجية',
-  'sahar.alsharq@gmail.com',
-  '01121030583',
-  'https://www.facebook.com/share/1AktcGb6b5/',
-  'https://www.instagram.com/sahar_alsharq2022?igsh=bTI4enlpdTBiMjJm',
-  'https://wa.me/201121030583',
-  '',
+  'الركن اليماني',
+  'للعبايات الخليجية والزي الإسلامي',
+  'alruknalyamanei@gmail.com',
+  '01128806800',
+  'https://www.facebook.com/Al-RuknAl-Yamanei',
+  'https://www.instagram.com/alruknal_yamani',
+  'https://wa.me/201068646144',
+  'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=1200',
   12,
   'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
   'الأحد: 12:00 م - 8:00 م'
@@ -32,154 +46,123 @@ ON CONFLICT (id) DO UPDATE SET
   hours_weekday = EXCLUDED.hours_weekday,
   hours_friday = EXCLUDED.hours_friday;
 
--- 2. Insert Features
+-- 2. Insert/Update Features
 INSERT INTO public.features (id, title, description, icon)
 VALUES 
-  ('feature-quality', 'جودة عالية', 'خامات مختارة بعناية', 'Award'),
-  ('feature-design', 'تصميم راقي', 'عبايات شرقية وخليجية', 'Shirt'),
-  ('feature-shipping', 'شحن سريع', 'لكافة أنحاء مصر', 'Truck'),
-  ('feature-service', 'خدمة عملاء', 'دعم سريع واهتمام دائم', 'Headset')
+  ('feature-quality', 'جودة عالية', 'أفضل الأقمشة', 'Award'),
+  ('feature-design', 'تغليف فاخر', 'يليق بك', 'Gift'),
+  ('feature-shipping', 'شحن سريع', 'لكافة المناطق', 'Truck'),
+  ('feature-service', 'استبدال سهل', 'خلال 7 أيام', 'RefreshCw')
 ON CONFLICT (id) DO UPDATE SET
   title = EXCLUDED.title,
   description = EXCLUDED.description,
   icon = EXCLUDED.icon;
 
+-- Clean up existing branches & links first to ensure clean state
+DELETE FROM public.branch_links;
+DELETE FROM public.branches;
+
 -- 3. Insert Branches
 INSERT INTO public.branches (id, name, phone, phone_tel, address_lines, map_query, order_index)
 VALUES 
   (
-    'branch-mouski',
-    'فرع الموسكي',
-    '01121030583',
-    '+201121030583',
-    ARRAY['٤٢ شارع الموسكي الاول', 'بجانب عمارة نص الدنيا'],
-    'https://maps.app.goo.gl/a3DKXyoQhqs4oFgK6?g_st=iw',
+    'branch-main',
+    'الفرع الرئيسي',
+    '01128806800',
+    '+201128806800',
+    ARRAY['6 حارة النوبي', 'شارع الجيش الموسكي', 'القاهرة، مصر'],
+    'https://maps.app.goo.gl/NFi5pMAvHWVVFDnKA',
     1
-  ),
-  (
-    'branch-azhar',
-    'فرع الأزهر',
-    '01050379643',
-    '+201050379643',
-    ARRAY['١٠٢ شارع الأزهر الرئيسي', 'بجانب مول الدرديري'],
-    '١٠٢ شارع الأزهر الرئيسي، بجانب مول الدرديري، القاهرة، مصر',
-    2
-  )
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
-  phone = EXCLUDED.phone,
-  phone_tel = EXCLUDED.phone_tel,
-  address_lines = EXCLUDED.address_lines,
-  map_query = EXCLUDED.map_query,
-  order_index = EXCLUDED.order_index;
+  );
 
--- 4. Insert Branch Links for Mouski Branch
+-- 4. Insert Branch Links
 INSERT INTO public.branch_links (id, branch_id, type, label, href)
 VALUES 
   (
-    'link-mouski-whatsapp',
-    'branch-mouski',
+    'link-main-whatsapp',
+    'branch-main',
     'whatsapp',
     'واتساب',
-    'https://wa.me/201121030583'
+    'https://wa.me/201068646144'
   ),
   (
-    'link-mouski-instagram',
-    'branch-mouski',
+    'link-main-instagram',
+    'branch-main',
     'instagram',
     'إنستغرام',
-    'https://www.instagram.com/sahar_alsharq2022?igsh=bTI4enlpdTBiMjJm'
+    'https://www.instagram.com/alruknal_yamani'
   ),
   (
-    'link-mouski-facebook',
-    'branch-mouski',
+    'link-main-facebook',
+    'branch-main',
     'facebook',
     'فيسبوك',
-    'https://www.facebook.com/share/1AktcGb6b5/'
-  ),
-  (
-    'link-mouski-tiktok',
-    'branch-mouski',
-    'tiktok',
-    'تيك توك',
-    'https://www.tiktok.com/@saheralshark?_r=1&_t=ZS-95OeCXIIrqs'
-  )
-ON CONFLICT (id) DO UPDATE SET
-  branch_id = EXCLUDED.branch_id,
-  type = EXCLUDED.type,
-  label = EXCLUDED.label,
-  href = EXCLUDED.href;
+    'https://www.facebook.com/Al-RuknAl-Yamanei'
+  );
 
--- 5. Insert Branch Links for Azhar Branch
-INSERT INTO public.branch_links (id, branch_id, type, label, href)
-VALUES 
-  (
-    'link-azhar-whatsapp',
-    'branch-azhar',
-    'whatsapp',
-    'واتساب',
-    'https://wa.me/201050379643'
-  ),
-  (
-    'link-azhar-facebook',
-    'branch-azhar',
-    'facebook',
-    'فيسبوك',
-    'https://www.facebook.com/share/1EZ4bP3t9M/?mibextid=wwXIfr'
-  ),
-  (
-    'link-azhar-tiktok',
-    'branch-azhar',
-    'tiktok',
-    'تيك توك',
-    'https://www.tiktok.com/@sehr_elsharq?_r=1&_t=ZS-96HIj9Lx99U'
-  )
-ON CONFLICT (id) DO UPDATE SET
-  branch_id = EXCLUDED.branch_id,
-  type = EXCLUDED.type,
-  label = EXCLUDED.label,
-  href = EXCLUDED.href;
+-- Clean up categories & products to populate new ones
+DELETE FROM public.products;
+DELETE FROM public.categories;
 
--- 6. Insert Sample Categories
+-- 5. Insert Categories
 INSERT INTO public.categories (id, title, description)
 VALUES 
-  ('category-abayas', 'عبايات', 'عبايات شرقية وخليجية فاخرة'),
-  ('category-dresses', 'فساتين', 'فساتين راقية بتصاميم متنوعة'),
-  ('category-accessories', 'إكسسوارات', 'إكسسوارات تكميلية للعبايات')
-ON CONFLICT (id) DO UPDATE SET
-  title = EXCLUDED.title,
-  description = EXCLUDED.description;
+  ('category-new', 'وصل حديثاً', 'تصاميم وصلت حديثاً لموسم 2026'),
+  ('category-prayer', 'مجموعات الصلاة', 'أطقم صلاة مريحة ومميزة'),
+  ('category-luxury', 'عبايات فاخرة', 'عبايات خليجية فاخرة بأفخم الأقمشة'),
+  ('category-hijabs', 'طرح وأقمشة', 'طرح منسقة وأقمشة ناعمة عالية الجودة'),
+  ('category-beads', 'سبحات وملحقات', 'ملحقات وإكسسوارات متممة للأناقة');
 
--- 7. Insert Sample Products
-INSERT INTO public.products (id, name, description, note, category_id, images)
+-- 6. Insert Products
+INSERT INTO public.products (id, name, description, note, category_id, images, order_index, is_visible)
 VALUES 
   (
-    'product-abaya-1',
-    'عباية سوداء مطرزة',
-    'عباية سوداء فاخرة بتطريز ذهبي يدوي',
-    'تطريز ذهبي — متوفر مقاسات S إلى XXL',
-    'category-abayas',
-    ARRAY[]::text[]
+    'product-royal',
+    'عباية ملكية مطرزة',
+    'عباية ملكية فاخرة بتطريز ذهبي يدوي ونقوش راقية',
+    '450 ر.س — متوفر مقاسات S إلى XXL',
+    'category-new',
+    ARRAY['https://images.unsplash.com/photo-1609357605129-26f69add5d6e?q=80&w=800']::text[],
+    1,
+    true
   ),
   (
-    'product-abaya-2',
-    'عباية بيج كلاسيك',
-    'عباية بيج بتصميم كلاسيكي أنيق',
-    'خامة ناعمة — متوفر مقاسات M إلى XL',
-    'category-abayas',
-    ARRAY[]::text[]
+    'product-cloche',
+    'عباية كلوش فاخرة',
+    'عباية كلوش بتصميم انسيابي جذاب وحركة ناعمة',
+    '420 ر.س — متوفر مقاسات M إلى XL',
+    'category-new',
+    ARRAY['https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?q=80&w=800']::text[],
+    2,
+    true
   ),
   (
-    'product-dress-1',
-    'فستان سهرة أحمر',
-    'فستان سهرة أحمر بتصميم راقي',
-    'متوفر مقاسات S to L',
-    'category-dresses',
-    ARRAY[]::text[]
-  )
-ON CONFLICT (id) DO UPDATE SET
-  name = EXCLUDED.name,
-  description = EXCLUDED.description,
-  note = EXCLUDED.note,
-  category_id = EXCLUDED.category_id,
-  images = EXCLUDED.images;
+    'product-chamois',
+    'عباية شموه مطرزة',
+    'عباية من قماش الشموه الفاخر وتطريز مميز على الأكمام',
+    '470 ر.س — خامة ناعمة وألوان دافئة',
+    'category-new',
+    ARRAY['https://images.unsplash.com/photo-1594300062811-de3996701fe8?q=80&w=800']::text[],
+    3,
+    true
+  ),
+  (
+    'product-bisht',
+    'عباية بيشت أنيقة',
+    'عباية بيشت كلاسيكية واسعة بتطريز ذهبي ناعم وراقٍ',
+    '430 ر.س — ستايل بشت واسع',
+    'category-new',
+    ARRAY['https://images.unsplash.com/photo-1572804013427-4d7ca7268217?q=80&w=800']::text[],
+    4,
+    true
+  ),
+  (
+    'product-wide',
+    'عباية بقصة واسعة',
+    'عباية سوداء بقصة واسعة وتصميم مريح وعصري للأناقة اليومية',
+    '390 ر.س — خامة كريب كوري',
+    'category-new',
+    ARRAY['https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800']::text[],
+    5,
+    true
+  );

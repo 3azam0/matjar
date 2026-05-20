@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { BookOpen, Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { api, withRetry } from '../services/api';
 import { supabase } from '../lib/supabase';
 import { activeClient } from '../config/clients.js';
@@ -110,6 +111,100 @@ export function SiteFooter() {
       branchesChannel.unsubscribe();
     };
   }, []);
+
+  if (activeClient.key === 'al-rukn-al-yamani') {
+    const primaryBranch = branches[0] || activeClient.branches[0];
+    const addressLines = Array.isArray(primaryBranch?.address) ? primaryBranch.address.filter(Boolean) : [];
+    const mapHref = primaryBranch?.mapSearchQuery?.startsWith('http')
+      ? primaryBranch.mapSearchQuery
+      : 'https://maps.app.goo.gl/NFi5pMAvHWVVFDnKA';
+    const phoneItems = [
+      primaryBranch?.landline,
+      primaryBranch?.mobile_1,
+      primaryBranch?.mobile_2,
+      primaryBranch?.phone,
+      settings.hero_whatsapp,
+    ].filter(Boolean);
+    const uniquePhones = [...new Set(phoneItems)];
+
+    return (
+      <footer className="main-footer alrukn-footer">
+        <div className="alrukn-footer-grid">
+          <div className="alrukn-footer-col alrukn-footer-brand">
+            <img src={activeClient.logo} alt={activeClient.displayName} className="alrukn-footer-logo" />
+            <h3>{settings.hero_title || activeClient.displayName}</h3>
+            <p>{settings.hero_subtitle || 'للعبايات الخليجية والزي الإسلامي'}</p>
+            <div className="alrukn-footer-socials">
+              {settings.hero_whatsapp ? (
+                <a href={`https://wa.me/${settings.hero_whatsapp}`} target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+                  <WhatsAppIcon size={18} />
+                </a>
+              ) : null}
+              {settings.social_instagram ? (
+                <a href={settings.social_instagram} target="_blank" rel="noopener noreferrer" aria-label="إنستغرام">
+                  <InstagramIcon size={18} />
+                </a>
+              ) : null}
+              {settings.social_facebook ? (
+                <a href={settings.social_facebook} target="_blank" rel="noopener noreferrer" aria-label="فيسبوك">
+                  <FacebookIcon size={18} />
+                </a>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="alrukn-footer-col contact-col">
+            <h3>تواصلي معنا</h3>
+            <ul className="contact-list">
+              {uniquePhones.map((phone) => (
+                <li key={phone}>
+                  <Phone size={16} />
+                  <a href={`tel:${digitsOnly(phone)}`} dir="ltr">{phone}</a>
+                </li>
+              ))}
+              {settings.contact_email ? (
+                <li><Mail size={16} /> <a href={`mailto:${settings.contact_email}`}>{settings.contact_email}</a></li>
+              ) : null}
+            </ul>
+          </div>
+
+          <div className="alrukn-footer-col location-col">
+            <h3>موقعنا</h3>
+            <p className="location-address">
+              {addressLines.length ? addressLines.map((line) => (
+                <span key={line}>{line}<br /></span>
+              )) : 'القاهرة، مصر'}
+            </p>
+            <a href={mapHref} target="_blank" rel="noopener noreferrer" className="footer-map-btn">
+              تحديد الموقع على الخريطة
+            </a>
+          </div>
+
+          <div className="alrukn-footer-col order-col">
+            <h3>اطلبي الآن</h3>
+            <p>تصفحي الكتالوج أو تواصلي معنا لتأكيد المقاس والتفاصيل.</p>
+            <div className="footer-hours">
+              <Clock size={16} />
+              <span>{settings.hours_weekday}</span>
+            </div>
+            <Link to="/catalog" className="footer-catalog-btn">
+              <BookOpen size={17} />
+              الكتالوج
+            </Link>
+            {settings.hero_whatsapp ? (
+              <a href={`https://wa.me/${settings.hero_whatsapp}`} target="_blank" rel="noopener noreferrer" className="footer-wa-btn">
+                واتساب مباشر
+              </a>
+            ) : null}
+          </div>
+        </div>
+
+        <p className="copyright">© {new Date().getFullYear()} {settings.hero_title || 'الركن اليماني'}. جميع الحقوق محفوظة</p>
+        <Divider />
+        <p className="footer-credits">تصميم وتطوير محمد أبو العزم | جميع الحقوق محفوظة</p>
+      </footer>
+    );
+  }
 
   return (
     <footer className="main-footer">

@@ -11,7 +11,10 @@ export function SiteHeader() {
       <div className="site-header-inner">
         <Link to="/" className="site-header-brand">
           <img src={activeClient.logo} alt="" className="site-header-logo" width={48} height={48} />
-          <span className="site-header-title">{activeClient.displayName}</span>
+          <div className="site-header-brand-text">
+            <span className="site-header-title">{activeClient.displayName}</span>
+            <span className="site-header-subtitle">للعبايات الخليجية والزي الإسلامي</span>
+          </div>
         </Link>
         <nav className="site-header-nav" aria-label="التنقل الرئيسي">
           <Link to="/catalog" className={`site-header-link ${isCatalog ? 'is-active' : ''}`}>
