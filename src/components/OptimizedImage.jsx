@@ -41,6 +41,16 @@ export function OptimizedImage({
   const onLoadRef = useRef(onLoad);
   const onErrorRef = useRef(onError);
 
+  // Synchronously reset state in render phase if the source changes to prevent layout flicker
+  const [prevSrc, setPrevSrc] = useState(src);
+  if (src !== prevSrc) {
+    setPrevSrc(src);
+    setImageSrc(shouldLoadImmediately && src ? src : null);
+    setIsLoading(Boolean(src));
+    setHasError(false);
+    setIsInView(shouldLoadImmediately);
+  }
+
   useEffect(() => {
     onLoadRef.current = onLoad;
   }, [onLoad]);
@@ -50,19 +60,10 @@ export function OptimizedImage({
   }, [onError]);
 
   useEffect(() => {
-    queueMicrotask(() => {
-      setImageSrc(shouldLoadImmediately && src ? src : null);
-      setIsLoading(Boolean(src));
-      setHasError(false);
-      setIsInView(shouldLoadImmediately);
-    });
-  }, [src, shouldLoadImmediately]);
-
-  useEffect(() => {
     if (shouldLoadImmediately || !src) return;
 
     if (!('IntersectionObserver' in window)) {
-      queueMicrotask(() => setIsInView(true));
+      setIsInView(true);
       return;
     }
 

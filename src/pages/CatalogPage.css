@@ -7,7 +7,7 @@
 
 .catalog-main {
   padding: 12px 0 48px;
-  max-width: min(1180px, 92vw);
+  max-width: min(1180px, 94vw);
   margin-inline: auto;
 }
 
@@ -191,7 +191,12 @@
 .catalog-suggestions button.is-active {
   background: #ffffff;
   border-color: var(--gold, #b38e4d);
-  transform: translateY(-1px);
+}
+
+@media (hover: hover) {
+  .catalog-suggestions button:hover {
+    transform: translateY(-1px);
+  }
 }
 
 .catalog-filter-row {
@@ -336,7 +341,13 @@
   border-color: var(--gold, #b38e4d);
   color: #3d2618;
   box-shadow: 0 8px 18px rgba(94, 63, 31, 0.12);
-  transform: translateY(-1px);
+}
+
+/* Only lift on real pointer — not touch */
+@media (hover: hover) {
+  .catalog-chip:hover {
+    transform: translateY(-1px);
+  }
 }
 
 .catalog-chip.is-active small {
@@ -425,12 +436,26 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 10px 24px rgba(42, 28, 18, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* No transform transition on base — prevents jitter on touch devices */
+  transition: box-shadow 0.3s ease;
+  
+  /* Hardware acceleration to prevent flashing pixels/jitter on mobile screens */
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
-.catalog-product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(42, 28, 18, 0.12);
+/* Hover lift only on true pointer (mouse) devices — NOT on touch */
+@media (hover: hover) {
+  .catalog-product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .catalog-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(42, 28, 18, 0.12);
+  }
 }
 
 .catalog-product-image {
@@ -447,22 +472,19 @@
   height: 100%;
 }
 
+/* img inside OptimizedImage wrapper — opacity managed via inline style by component */
 .catalog-product-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease, opacity 0.4s ease;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.catalog-product-image img.is-active {
-  opacity: 1;
-  pointer-events: auto;
-  position: relative;
+  transition: transform 0.5s ease;
+  display: block;
+  
+  /* Hardware acceleration to prevent flashing pixels/jitter on mobile screens */
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .catalog-product-placeholder {
@@ -495,8 +517,11 @@
   backdrop-filter: blur(8px);
 }
 
-.catalog-product-card:hover .catalog-product-image img.is-active {
-  transform: scale(1.05);
+/* Image zoom on hover — only for mouse devices */
+@media (hover: hover) {
+  .catalog-product-card:hover .catalog-product-image img {
+    transform: scale(1.05);
+  }
 }
 
 .catalog-image-dots {
@@ -505,12 +530,15 @@
   left: 50%;
   transform: translateX(-50%);
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 6px;
   z-index: 5;
   background: rgba(0, 0, 0, 0.2);
   padding: 4px 8px;
   border-radius: 20px;
   backdrop-filter: blur(4px);
+  max-width: calc(100% - 24px);
 }
 
 .dot {
@@ -572,6 +600,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .catalog-product-heading {
@@ -612,6 +642,10 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  /* Fallback max-height for browsers that don't support line-clamp */
+  max-height: calc(1.6em * 3 + 1px);
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .catalog-product-note {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Images, Link2, MessageCircle, Search, Share2, SlidersHorizontal, X } from 'lucide-react';
 import { SiteHeader } from '../components/SiteHeader';
 import { SiteFooter } from '../components/SiteFooter';
@@ -47,7 +47,7 @@ function productSearchText(product) {
   ].filter(Boolean).join(' '));
 }
 
-function ProductCard({ product, categoryTitle, whatsappNumber, onImageClick }) {
+const ProductCard = memo(function ProductCard({ product, categoryTitle, whatsappNumber, onImageClick }) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const images = useMemo(
     () => (Array.isArray(product.images) ? product.images.filter(Boolean) : []),
@@ -95,7 +95,7 @@ function ProductCard({ product, categoryTitle, whatsappNumber, onImageClick }) {
             imgClassName="is-active"
             loading={currentIdx === 0 ? 'lazy' : 'eager'}
             rootMargin="360px"
-            showBlur={false}
+            showBlur={true}
           />
         ) : (
           <div className="catalog-product-placeholder">
@@ -159,7 +159,7 @@ function ProductCard({ product, categoryTitle, whatsappNumber, onImageClick }) {
       </div>
     </li>
   );
-}
+});
 
 function Lightbox({ activeLightbox, onClose }) {
   const { images, currentIndex, productName } = activeLightbox;
@@ -168,7 +168,7 @@ function Lightbox({ activeLightbox, onClose }) {
   const touchRef = useRef({ startX: 0, startY: 0, isDragging: false });
 
   useEffect(() => {
-    queueMicrotask(() => setCurrentIdx(currentIndex));
+    setCurrentIdx(currentIndex);
   }, [currentIndex]);
 
   // Lock body scroll when lightbox is open
@@ -329,6 +329,10 @@ export function CatalogPage() {
   const [sortBy, setSortBy] = useState('date-desc');
   const [activeLightbox, setActiveLightbox] = useState(null);
 
+  const handleImageClick = useCallback((images, currentIdx, productName) => {
+    setActiveLightbox({ images, currentIndex: currentIdx, productName });
+  }, []);
+
   const fetchCatalog = useCallback(async () => {
     setIsLoading(true);
     setLoadError(null);
@@ -366,7 +370,7 @@ export function CatalogPage() {
   }, [showError]);
 
   useEffect(() => {
-    queueMicrotask(fetchCatalog);
+    fetchCatalog();
 
     // Subscribe to real-time catalog updates with slight delay for propagation
     const categorySubscription = supabase
@@ -472,34 +476,7 @@ export function CatalogPage() {
     });
   }, [baseProducts, searchTerm, sortBy]);
 
-  const searchSuggestions = useMemo(() => {
-    const currentSearch = normalizeSearchText(searchTerm);
-    const suggestions = [];
-    const seen = new Set();
 
-    const addSuggestion = (value) => {
-      const label = String(value || '').trim();
-      const normalized = normalizeSearchText(label);
-      if (!label || normalized.length < 2 || seen.has(normalized)) return;
-      if (currentSearch && !normalized.includes(currentSearch) && !currentSearch.includes(normalized)) return;
-      seen.add(normalized);
-      suggestions.push(label);
-    };
-
-    categories.forEach((category) => addSuggestion(category.title));
-    allProducts.forEach((product) => {
-      addSuggestion(product.name);
-      addSuggestion(product.categoryTitle);
-      if (product.note) {
-        String(product.note)
-          .split(/[—،,-]/)
-          .slice(0, 2)
-          .forEach(addSuggestion);
-      }
-    });
-
-    return suggestions.slice(0, 6);
-  }, [allProducts, categories, searchTerm]);
 
   const hasActiveFilters = searchTerm || sortBy !== 'date-desc' || activeId !== 'all';
   const searchTerms = getSearchTerms(searchTerm);
@@ -514,7 +491,7 @@ export function CatalogPage() {
     <div className="catalog-page">
       <SiteHeader />
 
-      <main className="catalog-main section-shell">
+      <main className="catalog-main">
         <header className="catalog-hero">
           <h1>كتالوج المنتجات</h1>
           <p>تصفحي التصنيفات والمنتجات، ثم تواصلي معنا على واتساب لأي استفسار أو طلب.</p>
@@ -552,21 +529,7 @@ export function CatalogPage() {
               )}
             </div>
 
-            {searchSuggestions.length > 0 ? (
-              <div className="catalog-suggestions" aria-label="اقتراحات البحث">
-                <span>اقتراحات</span>
-                {searchSuggestions.map((suggestion) => (
-                  <button
-                    key={suggestion}
-                    type="button"
-                    onClick={() => setSearchTerm(suggestion)}
-                    className={normalizeSearchText(searchTerm) === normalizeSearchText(suggestion) ? 'is-active' : ''}
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
-            ) : null}
+
           </div>
 
           <div className="catalog-filter-row">
@@ -649,9 +612,7 @@ export function CatalogPage() {
                   product={p}
                   categoryTitle={p.categoryTitle || activeCategory.title}
                   whatsappNumber={whatsappNumber}
-                  onImageClick={(images, currentIdx, productName) => {
-                    setActiveLightbox({ images, currentIndex: currentIdx, productName });
-                  }}
+                  onImageClick={handleImageClick}
                 />
               ))}
             </ul>
