@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { api, withRetry } from '../services/api';
 import { supabase } from '../lib/supabase';
+import { getWhatsAppHref, formatWhatsAppNumber } from '../lib/whatsapp.js';
 
 const WhatsAppIcon = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -68,7 +69,7 @@ export function SiteFooter() {
     try {
       const sData = await withRetry(() => api.getSettings());
       if (sData) {
-        const whatsappNumber = digitsOnly(sData.social_whatsapp) || digitsOnly(sData.contact_phone);
+        const whatsappNumber = formatWhatsAppNumber(sData.social_whatsapp) || formatWhatsAppNumber(sData.contact_phone);
         setSettings((prev) => ({
           ...prev,
           hero_title: sData.hero_title || sData.site_name || prev.hero_title,
@@ -154,7 +155,7 @@ export function SiteFooter() {
       </div>
 
       <div className="footer-social-row">
-        <a href={`https://wa.me/${settings.hero_whatsapp}`} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+        <a href={getWhatsAppHref(settings.hero_whatsapp)} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
           <WhatsAppIcon />
         </a>
         <a href={settings.social_instagram} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="إنستغرام">

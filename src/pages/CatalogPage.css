@@ -664,22 +664,47 @@
   gap: 8px;
   margin-top: auto;
   padding: 14px 16px;
-  background: #25d366;
+  background: linear-gradient(135deg, #25d366 0%, #1cbd55 100%);
   color: #ffffff;
   font-weight: 800;
   font-size: 0.95rem;
   border-radius: 8px;
   text-decoration: none;
-  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.25);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.catalog-product-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.24),
+    transparent
+  );
+  transition: 0.6s ease;
+}
+
+.catalog-product-cta:hover::before {
+  left: 100%;
 }
 
 .catalog-product-cta:hover {
-  background: #1ebe57;
-  transform: scale(1.02);
+  background: linear-gradient(135deg, #1ebe57 0%, #17a346 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
 }
 
 .catalog-product-cta:active {
-  transform: scale(0.98);
+  transform: translateY(1px);
+  box-shadow: 0 3px 8px rgba(37, 211, 102, 0.3);
 }
 
 .catalog-empty {
