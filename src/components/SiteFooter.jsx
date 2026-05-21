@@ -4,6 +4,7 @@ import { BookOpen, Clock, Mail, MapPin, Phone } from 'lucide-react';
 import { api, withRetry } from '../services/api';
 import { supabase } from '../lib/supabase';
 import { activeClient } from '../config/clients.js';
+import { getWhatsAppHref, formatWhatsAppNumber } from '../lib/whatsapp.js';
 
 const WhatsAppIcon = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -55,7 +56,7 @@ export function SiteFooter() {
     try {
       const sData = await withRetry(() => api.getSettings());
       if (sData) {
-        const whatsappNumber = digitsOnly(sData.social_whatsapp) || digitsOnly(sData.contact_phone);
+        const whatsappNumber = formatWhatsAppNumber(sData.social_whatsapp) || formatWhatsAppNumber(sData.contact_phone);
         setSettings((prev) => ({
           ...prev,
           hero_title: sData.hero_title || sData.site_name || prev.hero_title,
@@ -136,7 +137,7 @@ export function SiteFooter() {
             <p>{settings.hero_subtitle || 'للعبايات الخليجية والزي الإسلامي'}</p>
             <div className="alrukn-footer-socials">
               {settings.hero_whatsapp ? (
-                <a href={`https://wa.me/${settings.hero_whatsapp}`} target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+                <a href={getWhatsAppHref(settings.hero_whatsapp)} target="_blank" rel="noopener noreferrer" aria-label="واتساب">
                   <WhatsAppIcon size={18} />
                 </a>
               ) : null}
@@ -192,7 +193,7 @@ export function SiteFooter() {
               الكتالوج
             </Link>
             {settings.hero_whatsapp ? (
-              <a href={`https://wa.me/${settings.hero_whatsapp}`} target="_blank" rel="noopener noreferrer" className="footer-wa-btn">
+              <a href={getWhatsAppHref(settings.hero_whatsapp)} target="_blank" rel="noopener noreferrer" className="footer-wa-btn">
                 واتساب مباشر
               </a>
             ) : null}
@@ -237,7 +238,7 @@ export function SiteFooter() {
 
       <div className="footer-social-row">
         {settings.hero_whatsapp ? (
-          <a href={`https://wa.me/${settings.hero_whatsapp}`} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
+          <a href={getWhatsAppHref(settings.hero_whatsapp)} className="footer-social-link" target="_blank" rel="noopener noreferrer" aria-label="واتساب">
             <WhatsAppIcon />
           </a>
         ) : null}

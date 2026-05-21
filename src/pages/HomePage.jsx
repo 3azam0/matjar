@@ -26,6 +26,7 @@ import { useNotification } from '../lib/NotificationContext';
 import { api, withRetry } from '../services/api';
 import { supabase } from '../lib/supabase';
 import { activeClient } from '../config/clients.js';
+import { getWhatsAppHref, formatWhatsAppNumber } from '../lib/whatsapp.js';
 import '../App.css';
 import '../styles/ErrorDisplay.css';
 
@@ -235,7 +236,7 @@ function digitsOnly(value) {
 function mapSettings(settings) {
   if (!settings) return {};
 
-  const whatsappNumber = digitsOnly(settings.social_whatsapp) || digitsOnly(settings.contact_phone);
+  const whatsappNumber = formatWhatsAppNumber(settings.social_whatsapp) || formatWhatsAppNumber(settings.contact_phone);
 
   return {
     ...settings,
@@ -341,6 +342,7 @@ export function HomePage() {
               ...l,
               cls: l.type,
               icon: SOCIAL_ICONS[l.type] || <MessageCircle />,
+              href: l.type === 'whatsapp' ? getWhatsAppHref(l.href) : l.href,
             }));
 
             if (!links.some((link) => link.to === '/catalog')) {
@@ -479,7 +481,7 @@ export function HomePage() {
               </div>
               {settings.hero_whatsapp ? (
                 <a
-                  href={`https://wa.me/${settings.hero_whatsapp}`}
+                  href={getWhatsAppHref(settings.hero_whatsapp)}
                   className="hero-cta"
                   target="_blank"
                   rel="noopener noreferrer"

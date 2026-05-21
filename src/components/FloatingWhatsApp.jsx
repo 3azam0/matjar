@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react';
+import { api, withRetry } from '../services/api';
+import { supabase } from '../lib/supabase';
+import { getWhatsAppHref, formatWhatsAppNumber } from '../lib/whatsapp.js';
 
 const WhatsAppSVG = () => (
   <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -12,9 +15,43 @@ const ArrowUpSVG = () => (
   </svg>
 );
 
-export function FloatingWhatsApp({ phoneNumber = '201121030583' }) {
+export function FloatingWhatsApp({ phoneNumber: propPhoneNumber }) {
   const [isVisible, setIsVisible] = useState(false);
-  const hasPhone = Boolean(String(phoneNumber || '').replace(/[^\d]/g, ''));
+  const [whatsappNumber, setWhatsappNumber] = useState(propPhoneNumber || '');
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const settings = await withRetry(() => api.getSettings());
+        if (settings) {
+          const number = formatWhatsAppNumber(settings.hero_whatsapp || settings.social_whatsapp || settings.contact_phone);
+          if (number) {
+            setWhatsappNumber(number);
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load floating WhatsApp settings, using default', err);
+      }
+    }
+
+    if (!propPhoneNumber) {
+      fetchSettings();
+
+      // Subscribe to settings changes
+      const settingsChannel = supabase
+        .channel('floating-whatsapp-settings')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'site_settings' },
+          () => fetchSettings()
+        )
+        .subscribe();
+
+      return () => {
+        settingsChannel.unsubscribe();
+      };
+    }
+  }, [propPhoneNumber]);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 2000);
@@ -38,11 +75,14 @@ export function FloatingWhatsApp({ phoneNumber = '201121030583' }) {
     });
   };
 
+  const finalPhone = whatsappNumber || propPhoneNumber;
+  const hasPhone = Boolean(finalPhone);
+
   return (
     <div className="floating-widgets-container">
       {hasPhone ? (
         <a
-          href={`https://wa.me/${phoneNumber}`}
+          href={getWhatsAppHref(finalPhone)}
           className={`floating-whatsapp ${isVisible ? 'is-visible' : ''}`}
           target="_blank"
           rel="noopener noreferrer"
