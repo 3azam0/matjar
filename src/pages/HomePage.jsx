@@ -231,8 +231,6 @@ export function HomePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
   const [heroIndex, setHeroIndex] = useState(0);
-
-  // Get hero images from either hero_images array or legacy hero_image
   const heroImages = (Array.isArray(settings.hero_images) && settings.hero_images.length > 0)
     ? settings.hero_images
     : (settings.hero_image ? [settings.hero_image] : []);

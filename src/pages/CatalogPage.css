@@ -459,7 +459,7 @@
 }
 
 .catalog-product-image {
-  aspect-ratio: 3/4;
+  aspect-ratio: 3/4.15;
   overflow: hidden;
   background: #f9f5f0;
   position: relative;
@@ -596,7 +596,7 @@
 }
 
 .catalog-product-body {
-  padding: 18px;
+  padding: 22px 20px;
   flex: 1;
   display: flex;
   flex-direction: column;
