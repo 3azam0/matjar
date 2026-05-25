@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { CatalogPage } from './pages/CatalogPage.jsx';
 import { HomePage } from './pages/HomePage.jsx';
@@ -17,6 +17,10 @@ function AdminFallback() {
 export default function App() {
   const location = useLocation();
   const isAdmin = location.pathname.startsWith('/admin');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <>
