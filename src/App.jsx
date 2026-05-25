@@ -23,6 +23,10 @@ export default function App() {
     applyClientDocumentMeta(activeClient);
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <>
       <Routes>
