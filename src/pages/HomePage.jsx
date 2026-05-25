@@ -304,11 +304,24 @@ export function HomePage() {
       // Fetch Features with retry
       const fData = await withRetry(() => api.getFeatures());
       if (fData && fData.length > 0) {
-        setFeatures(fData.map((f) => ({
+        const dbFeatures = fData.map((f) => ({
           ...f,
           icon: ICON_MAP[f.icon] || ICON_MAP[f.icon_name] || <Award />,
           sub: f.description || f.subtitle || '',
-        })));
+        }));
+        
+        // Ensure we always have exactly 4 features for layout symmetry
+        if (dbFeatures.length < 4) {
+          const mergedFeatures = [...dbFeatures];
+          for (let i = dbFeatures.length; i < 4; i++) {
+            if (DEFAULT_FEATURES[i]) {
+              mergedFeatures.push(DEFAULT_FEATURES[i]);
+            }
+          }
+          setFeatures(mergedFeatures);
+        } else {
+          setFeatures(dbFeatures);
+        }
       }
 
       // Fetch Branches and Branch Links with retry
