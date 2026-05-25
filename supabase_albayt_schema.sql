@@ -19,12 +19,31 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
   social_instagram text DEFAULT '',
   social_whatsapp text DEFAULT '',
   hero_image text DEFAULT '',
+  hero_title text DEFAULT '',
+  hero_subtitle text DEFAULT '',
+  hero_tagline text DEFAULT '',
+  hero_desc_1 text DEFAULT '',
+  hero_desc_2 text DEFAULT '',
+  hero_desc_3 text DEFAULT '',
+  hero_desc_4 text DEFAULT '',
+  hero_whatsapp text DEFAULT '',
   products_per_page integer NOT NULL DEFAULT 12,
   hours_weekday text DEFAULT 'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
   hours_friday text DEFAULT 'الجمعة: 2:00 م - 10:00 م',
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+-- Ensure all hero columns exist if table was already created
+ALTER TABLE public.site_settings
+  ADD COLUMN IF NOT EXISTS hero_title text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_subtitle text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_tagline text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_desc_1 text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_desc_2 text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_desc_3 text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_desc_4 text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_whatsapp text DEFAULT '';
 
 -- B. Features
 CREATE TABLE IF NOT EXISTS public.features (
@@ -163,23 +182,42 @@ CREATE POLICY "Enable all for authenticated users" ON public.inquiries FOR ALL U
 -- A. Seed Site Settings
 INSERT INTO public.site_settings (
   id, site_name, site_description, contact_email, contact_phone, 
-  social_instagram, social_whatsapp, hours_weekday, hours_friday
+  social_instagram, social_whatsapp, hours_weekday, hours_friday,
+  hero_title, hero_subtitle, hero_tagline, 
+  hero_desc_1, hero_desc_2, hero_desc_3, hero_desc_4, 
+  hero_whatsapp
 ) VALUES (
   'al-bayt-al-khaliji-settings',
   'البيت الخليجي',
   'عبايات وتصاميم خليجية فاخرة تناسب أناقتك اليومية ومناسباتك الخاصة بأعلى جودة وخامات راقية.',
   'info@albayt-khaliji.com',
   '+966500000000',
-  'albayt_khaliji',
-  '966500000000',
+  'https://www.instagram.com/albayt_khaliji',
+  'https://wa.me/966500000000',
   'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
-  'الجمعة: 2:00 م - 10:00 م'
+  'الجمعة: 2:00 م - 10:00 م',
+  'البيت الخليجي',
+  'للعبايات الخليجية والزي الإسلامي الفاخر',
+  'أصالة الخليج.. فخامة تليق بأناقتكِ',
+  'خامات خليجية فاخرة مستوردة لأجلكِ',
+  'تطريز يدوي متقن بدقة وتفاصيل متناهية',
+  'قصات وتصاميم حصرية تناسب كافة الأوقات',
+  'توصيل سريع وآمن لجميع مدن ومناطق المملكة',
+  '966500000000'
 ) ON CONFLICT (id) DO UPDATE SET
   site_name = EXCLUDED.site_name,
   site_description = EXCLUDED.site_description,
   contact_email = EXCLUDED.contact_email,
   social_instagram = EXCLUDED.social_instagram,
-  social_whatsapp = EXCLUDED.social_whatsapp;
+  social_whatsapp = EXCLUDED.social_whatsapp,
+  hero_title = EXCLUDED.hero_title,
+  hero_subtitle = EXCLUDED.hero_subtitle,
+  hero_tagline = EXCLUDED.hero_tagline,
+  hero_desc_1 = EXCLUDED.hero_desc_1,
+  hero_desc_2 = EXCLUDED.hero_desc_2,
+  hero_desc_3 = EXCLUDED.hero_desc_3,
+  hero_desc_4 = EXCLUDED.hero_desc_4,
+  hero_whatsapp = EXCLUDED.hero_whatsapp;
 
 -- B. Seed Features
 INSERT INTO public.features (id, title, description, icon, order_index) VALUES
