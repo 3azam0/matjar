@@ -1,4 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Images, Link2, MessageCircle, Search, Share2, SlidersHorizontal, X } from 'lucide-react';
 import { SiteHeader } from '../components/SiteHeader';
 import { SiteFooter } from '../components/SiteFooter';
@@ -57,7 +58,8 @@ function productSearchText(product) {
   ].filter(Boolean).join(' '));
 }
 
-const ProductCard = memo(function ProductCard({ product, categoryTitle, whatsappNumber, onImageClick }) {
+const ProductCard = memo(function ProductCard({ product, categoryTitle, whatsappNumber }) {
+  const navigate = useNavigate();
   const [currentIdx, setCurrentIdx] = useState(0);
   const images = useMemo(
     () => (Array.isArray(product.images) ? product.images.filter(Boolean) : []),
@@ -89,12 +91,8 @@ const ProductCard = memo(function ProductCard({ product, categoryTitle, whatsapp
   return (
     <li className="catalog-product-card">
       <div 
-        className={`catalog-product-image ${images.length > 0 ? 'clickable' : ''}`}
-        onClick={() => {
-          if (images.length > 0 && onImageClick) {
-            onImageClick(images, currentIdx, product.name);
-          }
-        }}
+        className="catalog-product-image clickable"
+        onClick={() => navigate(`/product/${product.id}`)}
       >
         <div className="catalog-product-badge">{categoryTitle}</div>
         {currentImage ? (
@@ -153,7 +151,11 @@ const ProductCard = memo(function ProductCard({ product, categoryTitle, whatsapp
       </div>
       <div className="catalog-product-body">
         <div className="catalog-product-heading">
-          <h3 className="catalog-product-title">{product.name}</h3>
+          <h3 className="catalog-product-title">
+            <Link to={`/product/${product.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+              {product.name}
+            </Link>
+          </h3>
           {images.length > 1 ? <span>{images.length} صور</span> : null}
         </div>
         <p className="catalog-product-description">{product.description ?? ''}</p>
@@ -341,11 +343,6 @@ export function CatalogPage() {
   const [whatsappNumber, setWhatsappNumber] = useState(defaultWhatsapp);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date-desc');
-  const [activeLightbox, setActiveLightbox] = useState(null);
-
-  const handleImageClick = useCallback((images, currentIdx, productName) => {
-    setActiveLightbox({ images, currentIndex: currentIdx, productName });
-  }, []);
 
   const fetchCatalog = useCallback(async () => {
     setIsLoading(true);
@@ -626,7 +623,6 @@ export function CatalogPage() {
                   product={p}
                   categoryTitle={p.categoryTitle || activeCategory.title}
                   whatsappNumber={whatsappNumber}
-                  onImageClick={handleImageClick}
                 />
               ))}
             </ul>
@@ -641,13 +637,6 @@ export function CatalogPage() {
       </main>
 
       <SiteFooter />
-
-      {activeLightbox && (
-        <Lightbox
-          activeLightbox={activeLightbox}
-          onClose={() => setActiveLightbox(null)}
-        />
-      )}
     </div>
   );
 }

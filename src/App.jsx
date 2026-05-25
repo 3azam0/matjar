@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { CatalogPage } from './pages/CatalogPage.jsx';
 import { HomePage } from './pages/HomePage.jsx';
+import { ProductDetailPage } from './pages/ProductDetailPage.jsx';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp.jsx';
 import { activeClient, applyClientDocumentMeta } from './config/clients.js';
 
@@ -32,6 +33,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/catalog" element={<CatalogPage />} />
+        <Route path="/product/:productId" element={<ProductDetailPage />} />
         <Route
           path="/admin/*"
           element={(
