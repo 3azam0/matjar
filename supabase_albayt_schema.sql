@@ -183,9 +183,10 @@ INSERT INTO public.site_settings (
 
 -- B. Seed Features
 INSERT INTO public.features (id, title, description, icon, order_index) VALUES
-('feat-1', 'خامات خليجية فاخرة', 'أقمشة كريب، إنترنت، وميني صالون مستوردة خصيصاً لأناقتك.', 'Gem', 1),
-('feat-2', 'تطريز يدوي متقن', 'قصات خليجية كلاسيكية وعصرية منفذة بأيدي مصممين خبراء.', 'Scissors', 2),
-('feat-3', 'توصيل سريع وآمن', 'نشحن طلباتك بعناية فائقة وتوصيل سريع لباب بيتك.', 'Truck', 3)
+('feature-quality', 'جودة عالية', 'أفضل الأقمشة', 'Award', 1),
+('feature-design', 'تغليف فاخر', 'يليق بك', 'Gift', 2),
+('feature-shipping', 'شحن سريع', 'لكافة المناطق', 'Truck', 3),
+('feature-service', 'استبدال سهل', 'خلال 7 أيام', 'RefreshCw', 4)
 ON CONFLICT (id) DO UPDATE SET
   title = EXCLUDED.title,
   description = EXCLUDED.description,

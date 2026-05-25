@@ -133,7 +133,7 @@ export const clients = {
       hours_weekday: 'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
       hours_friday: 'الجمعة: 2:00 م - 10:00 م',
     },
-    features: alBaytFeatures,
+    features: alRuknFeatures,
     branches: alBaytBranches,
     categories: alBaytCategories,
     seo: {
