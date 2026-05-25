@@ -27,8 +27,8 @@ fi
 echo "🚀 Starting deployment to environment: $ENV (Branch: $BRANCH)..."
 
 # 0. Set up environment
-echo "⚙️ Copying env.alrukn to .env..."
-cp env.alrukn .env
+echo "⚙️ Copying env.albayt to .env..."
+cp env.albayt .env
 
 # 1. Build the project
 echo "📦 Building the project..."
@@ -36,6 +36,6 @@ npm run build
 
 # 2. Deploy to Cloudflare Pages
 echo "☁️ Deploying to Cloudflare Pages..."
-npx wrangler pages deploy dist --project-name al-rukn-al-yamani --branch "$BRANCH"
+npx wrangler pages deploy dist --project-name al-bayt-al-khaliji --branch "$BRANCH"
 
 echo "✨ Deployment successfully completed!"
