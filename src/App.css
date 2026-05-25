@@ -453,29 +453,14 @@ a {
   margin: 14px 0 26px;
   color: #5c4a40;
   font-size: clamp(1.02rem, 1.55vw, 1.28rem);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.85;
   max-width: 26em;
   animation: heroFadeUp 0.6s 0.6s ease-out both;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
 }
 
 .hero-description p {
   margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-align: center;
-}
-
-.hero-description p::before {
-  content: "✦";
-  color: var(--gold, #b38e4d);
-  font-size: 0.95rem;
-  display: inline-block;
 }
 
 .hero-cta {
