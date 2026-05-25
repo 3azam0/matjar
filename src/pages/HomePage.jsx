@@ -71,7 +71,7 @@ function mapsUrlsFromSearchQuery(query) {
     // Al Bayt Al Khaliji - Main branch
     if (query.includes('WdU9iA1kUTAi6XeY9') || query.includes('g_st=')) {
       return {
-        mapUrl: 'https://maps.app.goo.gl/WdU9iA1kUTAi6XeY9',
+        mapUrl: 'https://www.google.com/maps/place/30%C2%B002\'53.7%22N+31%C2%B015\'30.9%22E',
         mapEmbedUrl: `https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3453.6028421625024!2d31.25600837555395!3d30.04824997492171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzDCsDAyJzUzLjciTiAzMcKwMTUnMzAuOSJF!5e0!3m2!1sen!2seg!4v1779738994491!5m2!1sen!2seg`,
       };
     }
