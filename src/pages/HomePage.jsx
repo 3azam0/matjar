@@ -476,8 +476,10 @@ export function HomePage() {
               <HeroFlourish />
               <h2 className="hero-tagline">{settings.hero_tagline}</h2>
               <div className="hero-description">
-                <p>{settings.hero_desc_1}</p>
-                <p>{settings.hero_desc_2}</p>
+                {settings.hero_desc_1 && <p>{settings.hero_desc_1}</p>}
+                {settings.hero_desc_2 && <p>{settings.hero_desc_2}</p>}
+                {settings.hero_desc_3 && <p>{settings.hero_desc_3}</p>}
+                {settings.hero_desc_4 && <p>{settings.hero_desc_4}</p>}
               </div>
               {settings.hero_whatsapp ? (
                 <a

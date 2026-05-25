@@ -32,6 +32,6 @@ npm run build
 
 # 2. Deploy to Cloudflare Pages
 echo "☁️ Deploying to Cloudflare Pages..."
-npx wrangler pages deploy dist --project-name al-rukn-al-yamani --branch "$BRANCH"
+npx wrangler pages deploy dist --project-name al-bayt-al-khaliji --branch "$BRANCH"
 
 echo "✨ Deployment successfully completed!"

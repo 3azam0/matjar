@@ -1,10 +1,13 @@
 import alRuknLogo from '../assets/alrukn-logo.png';
 import alRuknHero from '../assets/hero-model.png';
+import alBaytLogo from '../assets/albayt-logo.jpg';
 
 export const CLIENT_KEYS = {
   AL_RUKN_AL_YAMANI: 'al-rukn-al-yamani',
+  AL_BAYT_AL_KHALIJI: 'al-bayt-al-khaliji',
 };
 
+// --- Al Rukn Al Yamani ---
 const alRuknFeatures = [
   { icon: 'Award', title: 'جودة عالية', sub: 'أفضل الأقمشة' },
   { icon: 'Gift', title: 'تغليف فاخر', sub: 'يليق بك' },
@@ -39,6 +42,38 @@ const alRuknCategories = [
   { id: 'category-beads', title: 'سبحات وملحقات', description: 'ملحقات وإكسسوارات متممة للأناقة' },
 ];
 
+// --- Al Bayt Al Khaliji ---
+const alBaytFeatures = [
+  { icon: 'Award', title: 'خامات راقية', sub: 'أقمشة كريب كورية ويابانية مستوردة' },
+  { icon: 'Scissors', title: 'تطريز يدوي', sub: 'دقة عالية وتفاصيل فاخرة بأيدي خبراء' },
+  { icon: 'Truck', title: 'شحن سريع', sub: 'لكافة مدن ومحافظات المملكة وخارجها' },
+  { icon: 'ShieldCheck', title: 'ضمان الجودة', sub: 'فحص دقيق لكل قطعة قبل الشحن' },
+];
+
+const alBaytBranches = [
+  {
+    name: 'المعرض الرئيسي',
+    address: ['شارع العليا العام', 'الرياض، المملكة العربية السعودية'],
+    phone: '0500000000',
+    phoneTel: '+966500000000',
+    mobile_1: '0500000000',
+    mobile_2: '',
+    landline: '',
+    mapSearchQuery: 'https://maps.google.com',
+    links: [
+      { type: 'whatsapp', label: 'واتساب', href: 'https://wa.me/966500000000' },
+      { type: 'instagram', label: 'إنستغرام', href: 'https://www.instagram.com/albayt_khaliji' },
+      { type: 'catalog', label: 'الكتالوج', to: '/catalog' },
+    ],
+  },
+];
+
+const alBaytCategories = [
+  { id: 'gulf-abayas', title: 'عبايات خليجية', description: 'أناقة الخليج الكلاسيكية بتفاصيل عصرية' },
+  { id: 'practical-abayas', title: 'عبايات عملية', description: 'موديلات خفيفة ومريحة تناسب يومك العملي' },
+  { id: 'occasions', title: 'عبايات مناسبات', description: 'قصات وتطريزات يدوية فاخرة لإطلالة مميزة' },
+];
+
 export const clients = {
   [CLIENT_KEYS.AL_RUKN_AL_YAMANI]: {
     key: CLIENT_KEYS.AL_RUKN_AL_YAMANI,
@@ -52,8 +87,10 @@ export const clients = {
       hero_title: 'الركن اليماني',
       hero_subtitle: 'للعبايات الخليجية والزي الإسلامي',
       hero_tagline: 'فخامة تراث.. جمال يليق بك',
-      hero_desc_1: 'عبايات خليجية فاخرة بتصاميم راقية',
-      hero_desc_2: 'وجودة استثنائية تناسب إطلالتكِ',
+      hero_desc_1: 'جودة عالية بأفخر الأقمشة الخليجية',
+      hero_desc_2: 'تغليف فاخر ومميز يليق بجمالكِ',
+      hero_desc_3: 'شحن سريع وآمن لكافة المناطق',
+      hero_desc_4: 'استبدال واسترجاع سهل خلال 7 أيام',
       hero_whatsapp: '201068646144',
       hero_image: alRuknHero,
       hero_images: [alRuknHero],
@@ -71,6 +108,42 @@ export const clients = {
       title: 'الركن اليماني — للعبايات الخليجية والزي الإسلامي',
       description: 'الركن اليماني للعبايات الخليجية والزي الإسلامي. تصفحي الكتالوج وتواصلي معنا عبر واتساب.',
       keywords: 'الركن اليماني, عبايات خليجية, عبايات, أزياء إسلامية, الموسكي',
+      image: '',
+    },
+  },
+  [CLIENT_KEYS.AL_BAYT_AL_KHALIJI]: {
+    key: CLIENT_KEYS.AL_BAYT_AL_KHALIJI,
+    name: 'Al-Bayt Al-Khaliji',
+    displayName: 'البيت الخليجي',
+    logo: alBaytLogo,
+    locale: 'ar_SA',
+    url: '',
+    catalogWhatsapp: '966500000000',
+    settings: {
+      hero_title: 'البيت الخليجي',
+      hero_subtitle: 'للعبايات الخليجية والزي الإسلامي الفاخر',
+      hero_tagline: 'أصالة الخليج.. فخامة تليق بأناقتكِ',
+      hero_desc_1: 'خامات خليجية فاخرة مستوردة لأجلكِ',
+      hero_desc_2: 'تطريز يدوي متقن بدقة وتفاصيل متناهية',
+      hero_desc_3: 'قصات وتصاميم حصرية تناسب كافة الأوقات',
+      hero_desc_4: 'توصيل سريع وآمن لجميع مدن ومناطق المملكة',
+      hero_whatsapp: '966500000000',
+      hero_image: alRuknHero,
+      hero_images: [alRuknHero],
+      contact_email: 'info@albayt-khaliji.com',
+      social_instagram: 'https://www.instagram.com/albayt_khaliji',
+      social_facebook: '',
+      social_tiktok: '',
+      hours_weekday: 'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
+      hours_friday: 'الجمعة: 2:00 م - 10:00 م',
+    },
+    features: alRuknFeatures,
+    branches: alBaytBranches,
+    categories: alBaytCategories,
+    seo: {
+      title: 'البيت الخليجي — للعبايات الخليجية الراقية',
+      description: 'البيت الخليجي للعبايات والزي الإسلامي الفاخر. تصفحي أرقى القصات والتطريزات الخليجية وتواصلي معنا مباشرة عبر واتساب.',
+      keywords: 'البيت الخليجي, عبايات خليجية, عبايات فاخرة, الرياض, تفصيل عبايات, كريب فاخر',
       image: '',
     },
   },
