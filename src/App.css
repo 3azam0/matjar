@@ -14,9 +14,8 @@
   --hero-cream-deep: #f0e8dc;
 }
 
-/* --- Al Rukn Al Yamani & Al-Bayt Al-Khaliji Brand Overrides --- */
-body[data-client="al-rukn-al-yamani"],
-body[data-client="al-bayt-al-khaliji"] {
+/* --- Al Rukn Al Yamani Brand Overrides (Classic Mocha & Gold) --- */
+body[data-client="al-rukn-al-yamani"] {
   --ink: #1e110a;              /* Deep rich ebony brown */
   --muted: #7a6452;            /* Warm mocha muted text */
   --gold: #c9a135;             /* Opulent pure gold */
@@ -32,28 +31,24 @@ body[data-client="al-bayt-al-khaliji"] {
   --hero-cream-deep: #eddcbe;  /* Rich golden cream depth */
 }
 
-/* ── Al Rukn Al Yamani & Al-Bayt Al-Khaliji: Enhanced Element Overrides ── */
-body[data-client="al-rukn-al-yamani"] .app-container,
-body[data-client="al-bayt-al-khaliji"] .app-container {
+/* ── Al Rukn Al Yamani: Enhanced Element Overrides ── */
+body[data-client="al-rukn-al-yamani"] .app-container {
   background:
     radial-gradient(circle at 6% 12%, rgba(201, 161, 53, 0.07), transparent 28rem),
     radial-gradient(circle at 94% 80%, rgba(78, 46, 24, 0.06), transparent 22rem),
     linear-gradient(180deg, #faf5ec 0%, #f3e8d5 45%, #f8f2e5 100%);
 }
 
-body[data-client="al-rukn-al-yamani"] .hero-section,
-body[data-client="al-bayt-al-khaliji"] .hero-section {
+body[data-client="al-rukn-al-yamani"] .hero-section {
   background: linear-gradient(165deg, #fbf5e8 0%, #f0dfc4 38%, #eddcbe 100%);
 }
 
-body[data-client="al-rukn-al-yamani"] .hero-atmosphere-img,
-body[data-client="al-bayt-al-khaliji"] .hero-atmosphere-img {
+body[data-client="al-rukn-al-yamani"] .hero-atmosphere-img {
   filter: blur(16px) saturate(1.15) brightness(0.98) sepia(0.08);
   opacity: 0.62;
 }
 
-body[data-client="al-rukn-al-yamani"] .hero-scrim,
-body[data-client="al-bayt-al-khaliji"] .hero-scrim {
+body[data-client="al-rukn-al-yamani"] .hero-scrim {
   background:
     linear-gradient(
       100deg,
@@ -67,132 +62,267 @@ body[data-client="al-bayt-al-khaliji"] .hero-scrim {
     radial-gradient(ellipse 50% 40% at 88% 12%, rgba(78, 46, 24, 0.07), transparent 50%);
 }
 
-body[data-client="al-rukn-al-yamani"] .hero-copy h1,
-body[data-client="al-bayt-al-khaliji"] .hero-copy h1 {
+body[data-client="al-rukn-al-yamani"] .hero-copy h1 {
   background: linear-gradient(180deg, #5c3510 0%, #1e0f07 52%, #3d1e0a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-body[data-client="al-rukn-al-yamani"] .hero-flourish,
-body[data-client="al-bayt-al-khaliji"] .hero-flourish {
+body[data-client="al-rukn-al-yamani"] .hero-flourish {
   color: #c9a135;
   opacity: 1;
 }
 
-body[data-client="al-rukn-al-yamani"] .site-header,
-body[data-client="al-bayt-al-khaliji"] .site-header {
+body[data-client="al-rukn-al-yamani"] .site-header {
   background: rgba(250, 245, 236, 0.97);
   border-bottom: 1px solid rgba(201, 161, 53, 0.28);
   box-shadow: 0 2px 24px rgba(30, 15, 7, 0.07);
 }
 
-body[data-client="al-rukn-al-yamani"] .site-header-title,
-body[data-client="al-bayt-al-khaliji"] .site-header-title {
+body[data-client="al-rukn-al-yamani"] .site-header-title {
   color: #1e0f07;
 }
 
-body[data-client="al-rukn-al-yamani"] .features-panel,
-body[data-client="al-bayt-al-khaliji"] .features-panel {
+body[data-client="al-rukn-al-yamani"] .features-panel {
   background: rgba(253, 248, 241, 0.98);
   border: 1px solid #d9c49e;
   box-shadow: 0 20px 50px rgba(30, 15, 7, 0.1), 0 0 0 1px rgba(201, 161, 53, 0.08);
 }
 
-body[data-client="al-rukn-al-yamani"] .feature-item,
-body[data-client="al-bayt-al-khaliji"] .feature-item {
+body[data-client="al-rukn-al-yamani"] .feature-item {
   border-left-color: #d9c49e;
 }
 
-body[data-client="al-rukn-al-yamani"] .branch-social-card,
-body[data-client="al-bayt-al-khaliji"] .branch-social-card {
+body[data-client="al-rukn-al-yamani"] .branch-social-card {
   background: rgba(253, 248, 241, 0.82);
   border: 1px solid #d9c49e;
   box-shadow: 0 12px 30px rgba(30, 15, 7, 0.07);
 }
 
-body[data-client="al-rukn-al-yamani"] .branch-social-card h3,
-body[data-client="al-bayt-al-khaliji"] .branch-social-card h3 {
+body[data-client="al-rukn-al-yamani"] .branch-social-card h3 {
   color: #c9a135;
 }
 
-body[data-client="al-rukn-al-yamani"] .branch-map-card,
-body[data-client="al-bayt-al-khaliji"] .branch-map-card {
+body[data-client="al-rukn-al-yamani"] .branch-map-card {
   background: #fdf8f1;
   border: 1px solid #d9c49e;
   box-shadow: 0 16px 42px rgba(30, 15, 7, 0.08);
 }
 
-body[data-client="al-rukn-al-yamani"] .map-frame iframe,
-body[data-client="al-bayt-al-khaliji"] .map-frame iframe {
+body[data-client="al-rukn-al-yamani"] .map-frame iframe {
   filter: sepia(0.22) saturate(0.8) brightness(1.04);
 }
 
-body[data-client="al-rukn-al-yamani"] .branch-map-link,
-body[data-client="al-bayt-al-khaliji"] .branch-map-link {
+body[data-client="al-rukn-al-yamani"] .branch-map-link {
   color: #7a4e0e;
   background: #fff8e8;
   border-color: #c9a135;
 }
 
-body[data-client="al-rukn-al-yamani"] .hours-row,
-body[data-client="al-bayt-al-khaliji"] .hours-row {
+body[data-client="al-rukn-al-yamani"] .hours-row {
   background: #fff8e8;
   border: 1px solid #d9c49e;
 }
 
-body[data-client="al-rukn-al-yamani"] .main-footer,
-body[data-client="al-bayt-al-khaliji"] .main-footer {
+body[data-client="al-rukn-al-yamani"] .main-footer {
   background: linear-gradient(180deg, #1a0c04 0%, #0e0704 100%);
   border-top: 2px solid rgba(201, 161, 53, 0.3);
 }
 
-body[data-client="al-rukn-al-yamani"] .footer-item,
-body[data-client="al-bayt-al-khaliji"] .footer-item {
+body[data-client="al-rukn-al-yamani"] .footer-item {
   border-left-color: rgba(201, 161, 53, 0.2);
 }
 
-body[data-client="al-rukn-al-yamani"] .divider span,
-body[data-client="al-bayt-al-khaliji"] .divider span {
+body[data-client="al-rukn-al-yamani"] .divider span {
   background: linear-gradient(90deg, transparent, rgba(201, 161, 53, 0.9), transparent);
 }
 
-body[data-client="al-rukn-al-yamani"] .divider,
-body[data-client="al-bayt-al-khaliji"] .divider {
+body[data-client="al-rukn-al-yamani"] .divider {
   color: #c9a135;
 }
 
-body[data-client="al-rukn-al-yamani"] .section-header h2,
-body[data-client="al-bayt-al-khaliji"] .section-header h2 {
+body[data-client="al-rukn-al-yamani"] .section-header h2 {
   background: linear-gradient(160deg, #5c3510 0%, #1e0f07 60%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-body[data-client="al-rukn-al-yamani"] .social-card,
-body[data-client="al-bayt-al-khaliji"] .social-card {
+body[data-client="al-rukn-al-yamani"] .social-card {
   background: rgba(253, 248, 241, 0.55);
   border: 1px solid rgba(201, 161, 53, 0.35);
   box-shadow: 0 8px 28px rgba(30, 15, 7, 0.07);
 }
 
-body[data-client="al-rukn-al-yamani"] .social-card:hover,
-body[data-client="al-bayt-al-khaliji"] .social-card:hover {
+body[data-client="al-rukn-al-yamani"] .social-card:hover {
   border-color: #c9a135;
   box-shadow: 0 12px 36px rgba(201, 161, 53, 0.2);
 }
 
-body[data-client="al-rukn-al-yamani"] .hero-catalog-link,
-body[data-client="al-bayt-al-khaliji"] .hero-catalog-link {
+body[data-client="al-rukn-al-yamani"] .hero-catalog-link {
   color: #7a4e0e;
   text-decoration-color: rgba(201, 161, 53, 0.55);
 }
 
-body[data-client="al-rukn-al-yamani"] .hero-catalog-link:hover,
-body[data-client="al-bayt-al-khaliji"] .hero-catalog-link:hover {
+body[data-client="al-rukn-al-yamani"] .hero-catalog-link:hover {
   color: #1e0f07;
+}
+
+
+/* --- Al-Bayt Al-Khaliji Brand Overrides (Modern Gulf Desert Sand & Obsidian) --- */
+body[data-client="al-bayt-al-khaliji"] {
+  --ink: #121212;              /* Obsidian deep carbon */
+  --muted: #5a5a5a;            /* Clean sophisticated graphite */
+  --gold: #b38e4d;             /* Sand champagne gold */
+  --gold-soft: #d4bc8d;        /* Soft sand glow */
+  --mint: #ffffff;             /* Crystal pure white */
+  --mint-deep: #f3ede2;        /* Premium warm sand */
+  --line: #ebdcc9;             /* Luxury warm sand separator */
+  --paper: #ffffff;            /* Pure white canvas */
+  --paper-deep: #faf8f5;       /* Premium ivory white */
+  --hero-brown: #151515;       /* Obsidian charcoal */
+  --hero-brown-mid: #333333;   /* Rich carbon mid tone */
+  --hero-cream: #faf8f5;       /* Warm ivory sand background */
+  --hero-cream-deep: #ebdcc9;  /* Structured luxury sand depth */
+}
+
+/* ── Al-Bayt Al-Khaliji: Enhanced Element Overrides ── */
+body[data-client="al-bayt-al-khaliji"] .app-container {
+  background:
+    radial-gradient(circle at 6% 12%, rgba(179, 142, 77, 0.05), transparent 28rem),
+    radial-gradient(circle at 94% 80%, rgba(38, 38, 38, 0.04), transparent 22rem),
+    linear-gradient(180deg, #ffffff 0%, #faf8f5 45%, #f5f2ec 100%);
+}
+
+body[data-client="al-bayt-al-khaliji"] .hero-section {
+  background: linear-gradient(165deg, #ffffff 0%, #faf8f5 38%, #f5f2ec 100%);
+}
+
+body[data-client="al-bayt-al-khaliji"] .hero-atmosphere-img {
+  filter: blur(16px) saturate(1.05) brightness(1) sepia(0.04);
+  opacity: 0.5;
+}
+
+body[data-client="al-bayt-al-khaliji"] .hero-scrim {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(250, 248, 245, 0.92) 36%,
+      rgba(245, 242, 236, 0.55) 56%,
+      rgba(235, 220, 201, 0.15) 76%,
+      transparent 100%
+    ),
+    radial-gradient(ellipse 80% 60% at 14% 90%, rgba(179, 142, 77, 0.1), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 88% 12%, rgba(38, 38, 38, 0.05), transparent 50%);
+}
+
+body[data-client="al-bayt-al-khaliji"] .hero-copy h1 {
+  background: linear-gradient(180deg, #333333 0%, #151515 52%, #222222 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+body[data-client="al-bayt-al-khaliji"] .hero-flourish {
+  color: #b38e4d;
+  opacity: 1;
+}
+
+body[data-client="al-bayt-al-khaliji"] .site-header {
+  background: rgba(255, 255, 255, 0.97);
+  border-bottom: 1px solid rgba(179, 142, 77, 0.22);
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.04);
+}
+
+body[data-client="al-bayt-al-khaliji"] .site-header-title {
+  color: #151515;
+}
+
+body[data-client="al-bayt-al-khaliji"] .features-panel {
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid #ebdcc9;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(179, 142, 77, 0.06);
+}
+
+body[data-client="al-bayt-al-khaliji"] .feature-item {
+  border-left-color: #ebdcc9;
+}
+
+body[data-client="al-bayt-al-khaliji"] .branch-social-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #ebdcc9;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+}
+
+body[data-client="al-bayt-al-khaliji"] .branch-social-card h3 {
+  color: #b38e4d;
+}
+
+body[data-client="al-bayt-al-khaliji"] .branch-map-card {
+  background: #ffffff;
+  border: 1px solid #ebdcc9;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.05);
+}
+
+body[data-client="al-bayt-al-khaliji"] .map-frame iframe {
+  filter: sepia(0.08) saturate(0.9) brightness(1.02);
+}
+
+body[data-client="al-bayt-al-khaliji"] .branch-map-link {
+  color: #b38e4d;
+  background: #ffffff;
+  border-color: #b38e4d;
+}
+
+body[data-client="al-bayt-al-khaliji"] .hours-row {
+  background: #faf8f5;
+  border: 1px solid #ebdcc9;
+}
+
+body[data-client="al-bayt-al-khaliji"] .main-footer {
+  background: linear-gradient(180deg, #151515 0%, #0d0d0d 100%);
+  border-top: 2px solid rgba(179, 142, 77, 0.25);
+}
+
+body[data-client="al-bayt-al-khaliji"] .footer-item {
+  border-left-color: rgba(179, 142, 77, 0.15);
+}
+
+body[data-client="al-bayt-al-khaliji"] .divider span {
+  background: linear-gradient(90deg, transparent, rgba(179, 142, 77, 0.8), transparent);
+}
+
+body[data-client="al-bayt-al-khaliji"] .divider {
+  color: #b38e4d;
+}
+
+body[data-client="al-bayt-al-khaliji"] .section-header h2 {
+  background: linear-gradient(160deg, #333333 0%, #151515 60%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+body[data-client="al-bayt-al-khaliji"] .social-card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(179, 142, 77, 0.25);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
+}
+
+body[data-client="al-bayt-al-khaliji"] .social-card:hover {
+  border-color: #b38e4d;
+  box-shadow: 0 12px 36px rgba(179, 142, 77, 0.15);
+}
+
+body[data-client="al-bayt-al-khaliji"] .hero-catalog-link {
+  color: #b38e4d;
+  text-decoration-color: rgba(179, 142, 77, 0.45);
+}
+
+body[data-client="al-bayt-al-khaliji"] .hero-catalog-link:hover {
+  color: #151515;
 }
 
 * {
