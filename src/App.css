@@ -1799,7 +1799,22 @@ a {
   color: var(--muted);
   line-height: 1.8;
   font-size: 1.05rem;
+  margin-bottom: 0.85rem;
+}
+
+.about-story-body {
   margin-bottom: 1.75rem;
+}
+
+.about-story-body p {
+  color: var(--muted);
+  line-height: 1.8;
+  font-size: 1rem;
+  margin: 0 0 0.5rem 0;
+}
+
+.about-story-body p:last-child {
+  margin-bottom: 0;
 }
 
 .about-story-btn {

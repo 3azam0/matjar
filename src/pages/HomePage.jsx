@@ -45,6 +45,8 @@ const ICON_MAP = {
   Clock: <Clock />,
   Gift: <Gift />,
   RefreshCw: <RefreshCw />,
+  Scissors: <Scissors />,
+  Layers: <Layers />,
 };
 
 /** Stable Google Maps links for browsers, iOS, and Android (opens Maps app when installed). */
@@ -585,53 +587,50 @@ export function HomePage() {
         </section> */}
 
         {/* ─── About Brand Section ─── */}
-        <section className="about-brand-section section-shell reveal" id="about">
-          <div className="about-brand-layout">
-            {/* Left Card: Story */}
-            <div className="about-story-card">
-              <span className="about-brand-tag">{activeClient.displayName}</span>
-              <h3>جودة تراثية.. وأناقة عصرية</h3>
-              <p>
-                نقدم لكِ أجمل العبايات الخليجية المصممة بعناية من أفخم الأقمشة وعلى معايير الجودة لتكون خيارك الأول في الأناقة والراحة.
-              </p>
-              <Link to="/catalog" className="about-story-btn">
-                تعرفي على المزيد
-              </Link>
-            </div>
+        {(() => {
+          const about = activeClient.about || {};
+          const aboutValues = about.values || [];
+          const aboutBodyLines = (about.body || '').split('\n');
+          return (
+            <section className="about-brand-section section-shell reveal" id="about">
+              <div className="about-brand-layout">
+                {/* Left Card: Story */}
+                <div className="about-story-card">
+                  <span className="about-brand-tag">{activeClient.displayName}</span>
+                  <h3>{about.headline || 'جودة تراثية.. وأناقة عصرية'}</h3>
+                  <div className="about-story-body">
+                    {aboutBodyLines.map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </div>
+                  <Link to="/catalog" className="about-story-btn">
+                    تعرفي على المزيد
+                  </Link>
+                </div>
 
-            {/* Center: Decorative Circular Logo */}
-            <div className="about-logo-center">
-              <div className="about-logo-circle">
-                <img src={activeClient.logo} alt={activeClient.displayName} />
-              </div>
-            </div>
+                {/* Center: Decorative Circular Logo */}
+                <div className="about-logo-center">
+                  <div className="about-logo-circle">
+                    <img src={activeClient.logo} alt={activeClient.displayName} />
+                  </div>
+                </div>
 
-            {/* Right Card: Core Values */}
-            <div className="about-values-card">
-              <div className="about-value-item">
-                <div className="value-icon"><Scissors size={24} /></div>
-                <div className="value-info">
-                  <h4>تصاميم عصرية</h4>
-                  <p>بتفاصيل راقية</p>
+                {/* Right Card: Core Values (from client config) */}
+                <div className="about-values-card">
+                  {aboutValues.map(({ icon, title, sub }) => (
+                    <div className="about-value-item" key={title}>
+                      <div className="value-icon">{ICON_MAP[icon] || <Award size={24} />}</div>
+                      <div className="value-info">
+                        <h4>{title}</h4>
+                        <p>{sub}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="about-value-item">
-                <div className="value-icon"><Layers size={24} /></div>
-                <div className="value-info">
-                  <h4>أقمشة فاخرة</h4>
-                  <p>مختارة بعناية</p>
-                </div>
-              </div>
-              <div className="about-value-item">
-                <div className="value-icon"><Award size={24} /></div>
-                <div className="value-info">
-                  <h4>كفالة وجودة عالية</h4>
-                  <p>في كل قطعة</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+            </section>
+          );
+        })()}
 
         {/* ─── New Arrivals Showcase ─── */}
         {/* <section className="new-arrivals-section section-shell reveal" id="new-arrivals">
