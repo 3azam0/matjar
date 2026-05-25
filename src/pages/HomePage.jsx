@@ -14,10 +14,12 @@ import {
   Phone,
   RefreshCw,
   Scissors,
+  Send,
   Shirt,
   ShoppingBag,
   Sparkles,
   Truck,
+  Users,
 } from 'lucide-react';
 import { SiteHeader } from '../components/SiteHeader';
 import { SiteFooter } from '../components/SiteFooter';
@@ -128,8 +130,10 @@ const InstagramIcon = ({ size = 24 }) => (
 
 const SOCIAL_ICONS = {
   whatsapp: <WhatsAppIcon />,
+  'whatsapp-group': <Users />,
   instagram: <InstagramIcon />,
   facebook: <FacebookIcon />,
+  telegram: <Send />,
   tiktok: <TikTokIcon />,
   catalog: <BookOpen />,
 };
@@ -489,8 +493,10 @@ export function HomePage() {
               <HeroFlourish />
               <h2 className="hero-tagline">{settings.hero_tagline}</h2>
               <div className="hero-description">
-                <p>{settings.hero_desc_1}</p>
-                <p>{settings.hero_desc_2}</p>
+                {settings.hero_desc_1 && <p>{settings.hero_desc_1}</p>}
+                {settings.hero_desc_2 && <p>{settings.hero_desc_2}</p>}
+                {settings.hero_desc_3 && <p>{settings.hero_desc_3}</p>}
+                {settings.hero_desc_4 && <p>{settings.hero_desc_4}</p>}
               </div>
               {settings.hero_whatsapp ? (
                 <a

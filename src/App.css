@@ -608,15 +608,31 @@ a {
 .hero-description {
   margin: 14px 0 26px;
   color: #5c4a40;
-  font-size: clamp(1.02rem, 1.55vw, 1.28rem);
-  font-weight: 500;
-  line-height: 1.85;
-  max-width: 26em;
+  font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+  font-weight: 600;
+  line-height: 1.8;
+  max-width: 28em;
   animation: heroFadeUp 0.6s 0.6s ease-out both;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .hero-description p {
   margin: 0;
+  position: relative;
+  padding-right: 22px;
+  text-align: right;
+}
+
+.hero-description p::before {
+  content: "✦";
+  position: absolute;
+  right: 0;
+  top: 1px;
+  color: var(--gold, #b38e4d);
+  font-size: 0.95rem;
+  line-height: 1;
 }
 
 .hero-cta {

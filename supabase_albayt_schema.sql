@@ -19,12 +19,31 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
   social_instagram text DEFAULT '',
   social_whatsapp text DEFAULT '',
   hero_image text DEFAULT '',
+  hero_title text DEFAULT '',
+  hero_subtitle text DEFAULT '',
+  hero_tagline text DEFAULT '',
+  hero_desc_1 text DEFAULT '',
+  hero_desc_2 text DEFAULT '',
+  hero_desc_3 text DEFAULT '',
+  hero_desc_4 text DEFAULT '',
+  hero_whatsapp text DEFAULT '',
   products_per_page integer NOT NULL DEFAULT 12,
   hours_weekday text DEFAULT 'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
   hours_friday text DEFAULT 'الجمعة: 2:00 م - 10:00 م',
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+-- Ensure all hero columns exist if table was already created
+ALTER TABLE public.site_settings
+  ADD COLUMN IF NOT EXISTS hero_title text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_subtitle text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_tagline text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_desc_1 text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_desc_2 text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_desc_3 text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_desc_4 text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_whatsapp text DEFAULT '';
 
 -- B. Features
 CREATE TABLE IF NOT EXISTS public.features (
@@ -163,23 +182,43 @@ CREATE POLICY "Enable all for authenticated users" ON public.inquiries FOR ALL U
 -- A. Seed Site Settings
 INSERT INTO public.site_settings (
   id, site_name, site_description, contact_email, contact_phone, 
-  social_instagram, social_whatsapp, hours_weekday, hours_friday
+  social_instagram, social_whatsapp, hours_weekday, hours_friday,
+  hero_title, hero_subtitle, hero_tagline, 
+  hero_desc_1, hero_desc_2, hero_desc_3, hero_desc_4, 
+  hero_whatsapp
 ) VALUES (
   'al-bayt-al-khaliji-settings',
   'البيت الخليجي',
   'عبايات وتصاميم خليجية فاخرة تناسب أناقتك اليومية ومناسباتك الخاصة بأعلى جودة وخامات راقية.',
   'info@albayt-khaliji.com',
-  '+966500000000',
-  'albayt_khaliji',
-  '966500000000',
+  '01155889161',
+  'https://www.instagram.com/khaleeji_home?igsh=dzU3OHY4bGw1ZTRi',
+  'https://wa.me/201155894894',
   'طوال أيام الأسبوع: 10:00 ص - 10:00 م',
-  'الجمعة: 2:00 م - 10:00 م'
+  'الجمعة: 2:00 م - 10:00 م',
+  'البيت الخليجي',
+  'عبايات خليجي هندميد فاخرة',
+  'جودة الخامه و دقة التنفيذ',
+  'جودة الخامه و دقة التنفيذ تجعلنا دائما متميزون في مجالنا و نسعي دائما للافضل من اجلكم🤩',
+  'عبايات خليجي هندميد❤️',
+  'الخامه: حرير - كتان ـ كوريشه - شيفون',
+  'المقاسات : متوفر كل المقاسات🔍',
+  '201155894894'
 ) ON CONFLICT (id) DO UPDATE SET
   site_name = EXCLUDED.site_name,
   site_description = EXCLUDED.site_description,
   contact_email = EXCLUDED.contact_email,
+  contact_phone = EXCLUDED.contact_phone,
   social_instagram = EXCLUDED.social_instagram,
-  social_whatsapp = EXCLUDED.social_whatsapp;
+  social_whatsapp = EXCLUDED.social_whatsapp,
+  hero_title = EXCLUDED.hero_title,
+  hero_subtitle = EXCLUDED.hero_subtitle,
+  hero_tagline = EXCLUDED.hero_tagline,
+  hero_desc_1 = EXCLUDED.hero_desc_1,
+  hero_desc_2 = EXCLUDED.hero_desc_2,
+  hero_desc_3 = EXCLUDED.hero_desc_3,
+  hero_desc_4 = EXCLUDED.hero_desc_4,
+  hero_whatsapp = EXCLUDED.hero_whatsapp;
 
 -- B. Seed Features
 INSERT INTO public.features (id, title, description, icon, order_index) VALUES
@@ -202,3 +241,37 @@ ON CONFLICT (id) DO UPDATE SET
   title = EXCLUDED.title,
   description = EXCLUDED.description,
   order_index = EXCLUDED.order_index;
+
+-- D. Seed Branches
+INSERT INTO public.branches (id, name, phone, phone_tel, mobile_1, mobile_2, landline, address_lines, map_query, order_index) VALUES
+(
+  'albayt-branch-main',
+  'معرض الموسكي',
+  '01155889161',
+  '+201155889161',
+  '01155889161',
+  '01155894894',
+  '0225883357',
+  ARRAY['36 جوهر القائد', 'الموسكي، القاهرة، مصر'],
+  'https://maps.app.goo.gl/WdU9iA1kUTAi6XeY9?g_st=ipc',
+  1
+)
+ON CONFLICT (id) DO UPDATE SET
+  name = EXCLUDED.name,
+  phone = EXCLUDED.phone,
+  phone_tel = EXCLUDED.phone_tel,
+  mobile_1 = EXCLUDED.mobile_1,
+  mobile_2 = EXCLUDED.mobile_2,
+  landline = EXCLUDED.landline,
+  address_lines = EXCLUDED.address_lines,
+  map_query = EXCLUDED.map_query,
+  order_index = EXCLUDED.order_index;
+
+-- E. Seed Branch Links
+DELETE FROM public.branch_links WHERE branch_id = 'albayt-branch-main';
+INSERT INTO public.branch_links (id, branch_id, type, label, href) VALUES
+('albayt-link-whatsapp', 'albayt-branch-main', 'whatsapp', 'واتساب', 'https://wa.me/201155894894'),
+('albayt-link-facebook', 'albayt-branch-main', 'facebook', 'فيسبوك', 'https://www.facebook.com/share/1F3YfD9XZf/?mibextid=wwXIfr'),
+('albayt-link-instagram', 'albayt-branch-main', 'instagram', 'إنستغرام', 'https://www.instagram.com/khaleeji_home?igsh=dzU3OHY4bGw1ZTRi'),
+('albayt-link-telegram', 'albayt-branch-main', 'telegram', 'تيليجرام', 'https://t.me/khaleeji_home'),
+('albayt-link-whatsapp-group', 'albayt-branch-main', 'whatsapp-group', 'جروب واتساب', 'https://chat.whatsapp.com/KWxQACcQj0I36G4bdEXIgI');
