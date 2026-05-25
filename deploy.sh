@@ -26,10 +26,6 @@ fi
 
 echo "🚀 Starting deployment to environment: $ENV (Branch: $BRANCH)..."
 
-# 0. Set up environment
-echo "⚙️ Copying env.albayt to .env..."
-cp env.albayt .env
-
 # 1. Build the project
 echo "📦 Building the project..."
 npm run build
