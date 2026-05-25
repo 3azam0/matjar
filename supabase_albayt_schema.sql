@@ -114,54 +114,46 @@ ALTER TABLE public.inquiries ENABLE ROW LEVEL SECURITY;
 -- 3. Configure RLS Policies
 -- ----------------------------------------------------------------------------
 
--- Helper function to drop policy safely before recreating
-CREATE OR REPLACE FUNCTION public.drop_policy_if_exists(t_name text, p_name text) 
-RETURNS void AS $$
-BEGIN
-  EXECUTE format('DROP POLICY IF EXISTS %I ON %I', p_name, t_name);
-END;
-$$ LANGUAGE plpgsql;
-
 -- A. Site Settings Policies
-SELECT public.drop_policy_if_exists('site_settings', 'Enable read for everyone');
+DROP POLICY IF EXISTS "Enable read for everyone" ON public.site_settings;
 CREATE POLICY "Enable read for everyone" ON public.site_settings FOR SELECT USING (true);
-SELECT public.drop_policy_if_exists('site_settings', 'Enable all for authenticated users');
+DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.site_settings;
 CREATE POLICY "Enable all for authenticated users" ON public.site_settings FOR ALL USING (auth.role() = 'authenticated');
 
 -- B. Features Policies
-SELECT public.drop_policy_if_exists('features', 'Enable read for everyone');
+DROP POLICY IF EXISTS "Enable read for everyone" ON public.features;
 CREATE POLICY "Enable read for everyone" ON public.features FOR SELECT USING (true);
-SELECT public.drop_policy_if_exists('features', 'Enable all for authenticated users');
+DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.features;
 CREATE POLICY "Enable all for authenticated users" ON public.features FOR ALL USING (auth.role() = 'authenticated');
 
 -- C. Branches Policies
-SELECT public.drop_policy_if_exists('branches', 'Enable read for everyone');
+DROP POLICY IF EXISTS "Enable read for everyone" ON public.branches;
 CREATE POLICY "Enable read for everyone" ON public.branches FOR SELECT USING (true);
-SELECT public.drop_policy_if_exists('branches', 'Enable all for authenticated users');
+DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.branches;
 CREATE POLICY "Enable all for authenticated users" ON public.branches FOR ALL USING (auth.role() = 'authenticated');
 
 -- D. Branch Links Policies
-SELECT public.drop_policy_if_exists('branch_links', 'Enable read for everyone');
+DROP POLICY IF EXISTS "Enable read for everyone" ON public.branch_links;
 CREATE POLICY "Enable read for everyone" ON public.branch_links FOR SELECT USING (true);
-SELECT public.drop_policy_if_exists('branch_links', 'Enable all for authenticated users');
+DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.branch_links;
 CREATE POLICY "Enable all for authenticated users" ON public.branch_links FOR ALL USING (auth.role() = 'authenticated');
 
 -- E. Categories Policies
-SELECT public.drop_policy_if_exists('categories', 'Enable read for everyone');
+DROP POLICY IF EXISTS "Enable read for everyone" ON public.categories;
 CREATE POLICY "Enable read for everyone" ON public.categories FOR SELECT USING (true);
-SELECT public.drop_policy_if_exists('categories', 'Enable all for authenticated users');
+DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.categories;
 CREATE POLICY "Enable all for authenticated users" ON public.categories FOR ALL USING (auth.role() = 'authenticated');
 
 -- F. Products Policies
-SELECT public.drop_policy_if_exists('products', 'Enable read for everyone');
+DROP POLICY IF EXISTS "Enable read for everyone" ON public.products;
 CREATE POLICY "Enable read for everyone" ON public.products FOR SELECT USING (true);
-SELECT public.drop_policy_if_exists('products', 'Enable all for authenticated users');
+DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.products;
 CREATE POLICY "Enable all for authenticated users" ON public.products FOR ALL USING (auth.role() = 'authenticated');
 
 -- G. Inquiries Policies
-SELECT public.drop_policy_if_exists('inquiries', 'Enable insert for everyone');
+DROP POLICY IF EXISTS "Enable insert for everyone" ON public.inquiries;
 CREATE POLICY "Enable insert for everyone" ON public.inquiries FOR INSERT WITH CHECK (true);
-SELECT public.drop_policy_if_exists('inquiries', 'Enable all for authenticated users');
+DROP POLICY IF EXISTS "Enable all for authenticated users" ON public.inquiries;
 CREATE POLICY "Enable all for authenticated users" ON public.inquiries FOR ALL USING (auth.role() = 'authenticated');
 
 -- ----------------------------------------------------------------------------
