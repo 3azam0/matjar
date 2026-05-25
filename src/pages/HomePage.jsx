@@ -68,6 +68,14 @@ function mapsUrlsFromSearchQuery(query) {
         mapEmbedUrl: `https://www.google.com/maps?q=${q}&output=embed&hl=ar&z=17`,
       };
     }
+    // Al Bayt Al Khaliji - Main branch
+    if (query.includes('WdU9iA1kUTAi6XeY9') || query.includes('g_st=')) {
+      const q = encodeURIComponent('البيت الخليجي، 36 جوهر القائد، الموسكي، القاهرة');
+      return {
+        mapUrl: 'https://maps.app.goo.gl/WdU9iA1kUTAi6XeY9',
+        mapEmbedUrl: `https://www.google.com/maps?q=${q}&output=embed&hl=ar&z=17`,
+      };
+    }
     // Generic fallback for maps short URLs
     return {
       mapUrl: query,
