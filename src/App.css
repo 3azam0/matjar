@@ -1093,7 +1093,8 @@ a {
   background: #050505;
 }
 
-.whatsapp .social-icon {
+.whatsapp .social-icon,
+.whatsapp-group .social-icon {
   background: #35bd4f;
 }
 
