@@ -140,7 +140,7 @@ const InstagramIcon = ({ size = 24 }) => (
 
 const SOCIAL_ICONS = {
   whatsapp: <WhatsAppIcon />,
-  'whatsapp-group': <Users />,
+  'whatsapp-group': <WhatsAppIcon />,
   instagram: <InstagramIcon />,
   facebook: <FacebookIcon />,
   telegram: <Send />,
