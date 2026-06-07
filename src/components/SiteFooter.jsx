@@ -202,7 +202,18 @@ export function SiteFooter() {
 
         <p className="copyright">© {new Date().getFullYear()} {settings.hero_title || 'الركن اليماني'}. جميع الحقوق محفوظة</p>
         <Divider />
-        <p className="footer-credits">تصميم وتطوير محمد أبو العزم | جميع الحقوق محفوظة</p>
+        <p className="footer-credits">
+          تصميم وتطوير{' '}
+          <a
+            href="https://wa.me/201011015138"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'inherit', textDecoration: 'underline' }}
+          >
+            محمد أبو العزم (01011015138)
+          </a>{' '}
+          | جميع الحقوق محفوظة
+        </p>
       </footer>
     );
   }
@@ -261,7 +272,18 @@ export function SiteFooter() {
 
       <p className="copyright">© {new Date().getFullYear()} {settings.hero_title}. جميع الحقوق محفوظة</p>
       <Divider />
-      <p className="footer-credits">تصميم وتطوير محمد أبو العزم | جميع الحقوق محفوظة</p>
+      <p className="footer-credits">
+        تصميم وتطوير{' '}
+        <a
+          href="https://wa.me/201011015138"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'inherit', textDecoration: 'underline' }}
+        >
+          محمد أبو العزم (01011015138)
+        </a>{' '}
+        | جميع الحقوق محفوظة
+      </p>
     </footer>
   );
 }
